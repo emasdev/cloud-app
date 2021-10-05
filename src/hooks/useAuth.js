@@ -54,7 +54,7 @@ export const AuthProvider = ({ children }) => {
         console.log("no user in");
       }
     });
-  }, [auth]);
+  }, [auth, db, userData]);
 
   // useEffect(() => {
 
@@ -148,6 +148,8 @@ export const AuthProvider = ({ children }) => {
     doCreateUserDoc,
     doSignOut,
   };
+
+
 
   if (isAuthenticating) {
     return <Loading />;

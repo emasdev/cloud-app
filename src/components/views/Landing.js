@@ -1,28 +1,24 @@
 import React from "react";
 import Layout from "../Layout/Layout";
-import { Text, Box } from "@chakra-ui/react";
+import { Grid, Box, Image, Center, Text } from "@chakra-ui/react";
 import { useAuth } from "../../hooks/useAuth";
+
+import heroImg from "../../img/hero.png";
 
 const Landing = () => {
   const { user, userData } = useAuth();
   return (
-    <Layout>
-      <Box textAlign="center">
-        <Text>Bienvenido a IDM</Text>
-        {user && userData && (
+    <Grid templateColumns="repeat(2, 1fr)" minH="100vh">
+      <Box w="100%" bg="blue.600" >
+        <Center h="100%" padding={8}>
           <Box>
-            <Text>
-              Hola {userData.nombre} {userData.apellidos}
-            </Text>
-            <Text>Tu correo es: {user.email}</Text>
-            <Text>
-              Lo que significa que tengo tus datos de autentificación y usuario
-              :)
-            </Text>
+            <Image src={heroImg} />
           </Box>
-        )}
+        </Center>
+
       </Box>
-    </Layout>
+      <Box w="100%" bg="blue.200" />
+    </Grid>
   );
 };
 
