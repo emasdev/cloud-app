@@ -1,128 +1,61 @@
-import { useForm } from "react-hook-form";
 import React from "react";
-import { withRouter } from "react-router-dom";
 import {
-  FormErrorMessage,
-  FormLabel,
-  FormControl,
-  Input,
+  Grid,
+  Box,
+  Image,
+  Center,
+  Text,
+  VStack,
+  Flex,
   Button,
-  Divider,
 } from "@chakra-ui/react";
-import Layout from "../Layout/Layout";
+
+import SignUpForm from "../auth/SignupForm";
 import { useAuth } from "../../hooks/useAuth";
 
-const SignUp = ({ history }) => {
-  const { doCreateUserWithEmailAndPassword, doCreateUserDoc } = useAuth();
+import heroImg from "../../img/hero.png";
 
-  const {
-    handleSubmit,
-    register,
-    formState: { errors, isSubmitting },
-  } = useForm();
-
-  const onSubmit = async (values) => {
-    let user = null;
-    let isDocCreated = null;
-    try {
-      user = await doCreateUserWithEmailAndPassword(
-        values.email,
-        values.password
-      );
-      isDocCreated = await doCreateUserDoc(user, {
-        nombre: values.nombre,
-        apellidos: values.apellidos,
-      });
-      history.push("/");
-    } catch (e) {
-      console.error(e.message);
-    }
-
-    // return new Promise((resolve) => {
-    //   setTimeout(() => {
-    //     alert(JSON.stringify(values, null, 2));
-    //     resolve();
-    //   }, 3000);
-    // });
-  };
+const SignUp = () => {
+  const { user, userData } = useAuth();
   return (
-    <Layout>
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <FormControl isInvalid={errors.nombre}>
-          <FormLabel htmlFor="nombre">Nombre</FormLabel>
-          <Input
-            id="nombre"
-            placeholder="nombre"
-            {...register("nombre", {
-              required: "Este campo es requerido",
-              minLength: {
-                value: 4,
-                message: "Tiene que tener por lo menos 4 caracteres",
-              },
-            })}
-          />
-          <FormErrorMessage>
-            {errors.nombre && errors.nombre.message}
-          </FormErrorMessage>
-        </FormControl>
+    <Grid templateColumns={{
+      base: "1fr", md: "1fr 1fr", xl: "2fr 1fr"
+    }} minH="100vh">
+      <Box w="100%"
+      //  bg="blue.800" 
+      >
+        <Center h="100%">
+          <VStack spacing={4}>
+            <Box>
+              <Image w="70%" m="auto" src={heroImg} />
+            </Box>
+            <Box>
+              <Text color="blue.300" mt={4}>
+                Agenda citas para los estudios de tus pacientes
+              </Text>
+              <Text color="blue.300" mt={2}>
+                Visualiza los estudios de tus pacientes
+              </Text>
+              <Text color="blue.300" mt={2}>
+                Almacena los estudios de tus pacientes
+              </Text>
+              <Text color="blue.300" mt={2}>
+                Aprovecha nuestras herramientas para manejo de imagenes radiográficas
+              </Text>
+            </Box>
+          </VStack>
+        </Center>
+      </Box>
+      <Box w="100%" bg="idmLight.500">
+        <Center h="100%">
+          <Box mb={12}>
+            <SignUpForm />
+          </Box>
 
-        <FormControl isInvalid={errors.apellidos}>
-          <FormLabel htmlFor="apellidos">Apellidos</FormLabel>
-          <Input
-            id="apellidos"
-            placeholder="apellidos"
-            {...register("apellidos", {
-              required: "Este campo es requerido",
-              minLength: {
-                value: 4,
-                message: "Tiene que tener por lo menos 4 caracteres",
-              },
-            })}
-          />
-          <FormErrorMessage>
-            {errors.apellidos && errors.apellidos.message}
-          </FormErrorMessage>
-        </FormControl>
-        <Divider />
-        <FormControl isInvalid={errors.email}>
-          <FormLabel htmlFor="email">Email</FormLabel>
-          <Input
-            id="email"
-            placeholder="email"
-            type="email"
-            {...register("email", {
-              required: "Este campo es requerido",
-              pattern: /^\S+@\S+$/i,
-            })}
-          />
-          <FormErrorMessage>
-            {errors.email && errors.email.message}
-          </FormErrorMessage>
-        </FormControl>
-        <FormControl isInvalid={errors.password}>
-          <FormLabel htmlFor="password">Password</FormLabel>
-          <Input
-            id="password"
-            placeholder="password"
-            type="password"
-            {...register("password", { required: "Este campo es requerido" })}
-          />
-          <FormErrorMessage>
-            {errors.password && errors.password.message}
-          </FormErrorMessage>
-        </FormControl>
-        <Divider />
-        <Button
-          mt={4}
-          colorScheme="blue"
-          isLoading={isSubmitting}
-          type="submit"
-        >
-          Crear nueva cuenta
-        </Button>
-      </form>
-    </Layout>
+        </Center>
+      </Box>
+    </Grid>
   );
 };
 
-export default withRouter(SignUp);
+export default SignUp;

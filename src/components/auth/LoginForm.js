@@ -3,9 +3,7 @@ import {
   FormControl,
   FormLabel,
   Input,
-  Checkbox,
   Stack,
-  Link,
   Button,
   Heading,
   Text,
@@ -13,6 +11,7 @@ import {
   Center,
   Alert,
   AlertIcon,
+  Link
 } from "@chakra-ui/react";
 import { useHistory } from "react-router";
 
@@ -41,12 +40,12 @@ export default function LoginForm() {
   return (
     <Center>
       <Stack spacing={8} mx={"auto"} maxW={"lg"} py={12} px={6}>
-        <Stack align={"center"}>
-          <Heading fontSize={"4xl"} textAlign={"center"}>
-            Ingresar a IDM
+        <Stack >
+          <Heading fontSize={"4xl"} color={"idm.500"}>
+            IDM Cloud
           </Heading>
-          <Text fontSize={"lg"} color={"gray.600"}>
-            Y utilice esta gran herramienta
+          <Text fontSize={"lg"} color={"gray.600"} textTransform="uppercase">
+            Bienvenido
           </Text>
         </Stack>
         <Box
@@ -73,8 +72,8 @@ export default function LoginForm() {
 
             <form onSubmit={handleSubmit(onSubmit)}>
               <FormControl id="email">
-                <FormLabel>
-                  Ingresar el email asociado a su cuenta IDM
+                <FormLabel color={"gray.600"}>
+                  Correo Electrónico
                 </FormLabel>
                 <Input
                   placeholder="Email"
@@ -90,7 +89,7 @@ export default function LoginForm() {
                 />
               </FormControl>
               <FormControl id="password" mt={3}>
-                <FormLabel>Password</FormLabel>
+                <FormLabel color={"gray.600"}>Password</FormLabel>
                 <Input
                   name="password"
                   placeholder="Password"
@@ -108,24 +107,21 @@ export default function LoginForm() {
                   })}
                 />
               </FormControl>
-              <Stack spacing={10} mt={4}>
-                <Stack
-                  direction={{ base: "column", sm: "row" }}
-                  align={"start"}
-                  justify={"space-between"}
-                >
-                  <Checkbox>Recordar</Checkbox>
-                  <Link color={"blue.400"}>¿Olvidaste tu password?</Link>
-                </Stack>
+              <Stack mt={4}>
                 <Button
                   mt={4}
-                  colorScheme="teal"
+                  colorScheme="idm"
                   isLoading={isSubmitting}
                   type="submit"
                   colorScheme="blue"
                 >
                   Ingresar
                 </Button>
+                <Link color={"blue.400"} textAlign="center">¿Olvidaste tu password?</Link>
+                <Button onClick={() => history.push("/signup")} mt={8}>
+                  Crear cuenta
+                </Button>
+
               </Stack>
             </form>
           </Stack>

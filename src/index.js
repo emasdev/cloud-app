@@ -1,5 +1,6 @@
 import React, { StrictMode } from "react";
-import { ChakraProvider, theme } from "@chakra-ui/react";
+import { ChakraProvider } from "@chakra-ui/react";
+import theme from "./theme"
 import { ColorModeScript } from "@chakra-ui/react";
 import ReactDOM from "react-dom";
 
