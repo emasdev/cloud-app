@@ -113,7 +113,6 @@ export default function LoginForm() {
                   colorScheme="idm"
                   isLoading={isSubmitting}
                   type="submit"
-                  colorScheme="blue"
                 >
                   Ingresar
                 </Button>

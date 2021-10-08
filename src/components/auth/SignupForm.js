@@ -50,7 +50,7 @@ export default function SignupForm() {
     <Center>
       <Stack spacing={8} mx={"auto"} py={12} px={6}>
         <Stack align={"center"}>
-          <Heading fontSize={"4xl"} textAlign={"center"}>
+          <Heading fontSize={"4xl"} textAlign={"center"} color="idm.500">
             Registrar nueva cuenta IDM
           </Heading>
           <Text fontSize={"lg"} color={"gray.600"}>
@@ -216,18 +216,18 @@ export default function SignupForm() {
                     },
                   })}
                 >
-                  <option value="option1">Especialidad 1</option>
-                  <option value="option2">Especialidad 2</option>
-                  <option value="option3">Especialidad 3</option>
+                  <option value="option1">General</option>
+                  <option value="option2">Ortodoncia y Ortopedia</option>
+                  <option value="option3">Cirujia Maxilofacial</option>
                 </Select>
               </FormControl>
               <Stack spacing={10} mt={8}>
                 <Button
-                  colorScheme="teal"
+                  colorScheme="idm"
                   isLoading={isSubmitting}
                   type="submit"
                 >
-                  Registrar
+                  Siguiente
                 </Button>
               </Stack>
             </form>
