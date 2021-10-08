@@ -117,10 +117,11 @@ export default function LoginForm() {
                   Ingresar
                 </Button>
                 <Link color={"blue.400"} textAlign="center">¿Olvidaste tu password?</Link>
-                <Button onClick={() => history.push("/signup")} mt={8}>
+              </Stack>
+              <Stack mt={4}>
+                <Button onClick={() => history.push("/signup")}>
                   Crear cuenta
                 </Button>
-
               </Stack>
             </form>
           </Stack>

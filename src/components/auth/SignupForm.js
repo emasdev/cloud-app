@@ -6,18 +6,21 @@ import {
   Input,
   Checkbox,
   Stack,
-  Link,
   Button,
   Heading,
   Text,
+  Textarea,
   useColorModeValue,
   Center,
   Alert,
   AlertIcon,
   SimpleGrid,
   Select,
+  Grid,
+  Divider,
+  Link
 } from "@chakra-ui/react";
-import { useHistory } from "react-router";
+import { useHistory, Link as LinkTo } from "react-router-dom";
 
 import { useForm } from "react-hook-form";
 import { useAuth } from "../../hooks/useAuth";
@@ -47,193 +50,79 @@ export default function SignupForm() {
   };
 
   return (
-    <Center>
-      <Stack spacing={8} mx={"auto"} py={12} px={6}>
-        <Stack align={"center"}>
-          <Heading fontSize={"4xl"} textAlign={"center"} color="idm.500">
-            Registrar nueva cuenta IDM
-          </Heading>
-          <Text fontSize={"lg"} color={"gray.600"}>
-            y obtenga grandes beneficios
-          </Text>
-        </Stack>
-        <Box
-          rounded={"lg"}
-          bg={useColorModeValue("white", "gray.700")}
-          boxShadow={"lg"}
-          p={8}
-        >
-          <Stack spacing={4}>
-            {errors.size > 0 && (
-              <Alert status="error" variant="subtle" mt={6} mb={6}>
-                <AlertIcon>{errors.email.message}</AlertIcon>
-                <AlertIcon>{errors.password.message}</AlertIcon>
-                <AlertIcon>{errors.cpassword.message}</AlertIcon>
-              </Alert>
-            )}
-            <form onSubmit={handleSubmit(onSubmit)}>
-              <SimpleGrid columns={2} spacing={5}>
-                <FormControl id="nombre" isRequired>
-                  <FormLabel>Nombre</FormLabel>
-                  <Input
-                    placeholder="Nombre(s)"
-                    {...register("nombre", {
-                      required: {
-                        value: true,
-                        message: "Es necesario escribir su nombre",
-                      },
-                      pattern: /^\S+@\S+$/i,
-                    })}
-                  />
-                </FormControl>
-                <FormControl id="apellidos" isRequired>
-                  <FormLabel>Apellidos</FormLabel>
-                  <Input
-                    placeholder="Apellidos"
-                    {...register("apellidos", {
-                      required: {
-                        value: true,
-                        message: "Es necesario escribir sus apellidos",
-                      },
-                      pattern: /^\S+@\S+$/i,
-                    })}
-                  />
-                </FormControl>
-              </SimpleGrid>
-              <FormControl id="email" mt={2} isRequired>
-                <FormLabel>Email</FormLabel>
-                <Input
-                  placeholder="Email"
-                  type="email"
-                  {...register("email", {
-                    required: {
-                      value: true,
-                      message:
-                        "Es necesario escribir un email asociado a su cuenta IDM",
-                    },
-                    pattern: /^\S+@\S+$/i,
-                  })}
-                />
-              </FormControl>
-              <SimpleGrid columns={2} spacing={5}>
-                <FormControl id="password" mt={3} isRequired>
-                  <FormLabel>Password</FormLabel>
-                  <Input
-                    name="password"
-                    placeholder="Password"
-                    type="password"
-                    {...register("password", {
-                      required: {
-                        value: true,
-                        message: "Es necesario escribir un password correcto",
-                      },
-                      minLength: {
-                        value: 6,
-                        message:
-                          "El password tiene que tener 6 carácteres por lo menos",
-                      },
-                    })}
-                  />
-                </FormControl>
-                <FormControl id="cpassword" mt={3} isRequired>
-                  <FormLabel>Comfirmar password</FormLabel>
-                  <Input
-                    name="cpassword"
-                    placeholder="Comfirmar password"
-                    type="password"
-                    {...register("cpassword", {
-                      required: {
-                        value: true,
-                        message: "Es necesario escribir un password correcto",
-                      },
-                      minLength: {
-                        value: 6,
-                        message:
-                          "El password tiene que tener 6 carácteres por lo menos",
-                      },
-                    })}
-                  />
-                </FormControl>
-              </SimpleGrid>
-              <SimpleGrid columns={2} spacing={5} mt={2}>
-                <FormControl id="telefono" isRequired>
-                  <FormLabel>Teléfono movil</FormLabel>
-                  <Input
-                    name="telefono"
-                    placeholder="Teléfono"
-                    type="tel"
-                    {...register("telefono", {
-                      required: {
-                        value: true,
-                        message: "Es necesario escribir un teléfono correcto",
-                      },
-                      minLength: {
-                        value: 9,
-                        message:
-                          "El teléfono tiene que tener 10 numeros por lo menos",
-                      },
-                      maxLength: {
-                        value: 10,
-                        message:
-                          "El teléfono tiene que tener 10 numeros máximo",
-                      },
-                    })}
-                  />
-                </FormControl>
-                <FormControl id="telefono_fijo">
-                  <FormLabel>Teléfono fijo</FormLabel>
-                  <Input
-                    name="telefono_fijo"
-                    placeholder="Teléfono Fijo"
-                    type="tel"
-                    {...register("telefono_fijo", {
-                      required: {
-                        value: true,
-                        message: "Es necesario escribir un teléfono correcto",
-                      },
-                      minLength: {
-                        value: 9,
-                        message:
-                          "El teléfono tiene que tener 10 numeros por lo menos",
-                      },
-                      maxLength: {
-                        value: 10,
-                        message:
-                          "El teléfono tiene que tener 10 numeros máximo",
-                      },
-                    })}
-                  />
-                </FormControl>
-              </SimpleGrid>
-              <FormControl mt={4}>
-                <FormLabel>Especialidad</FormLabel>
-                <Select
-                  placeholder="Seleccionar especialidad"
-                  {...register("especialidad", {
-                    required: {
-                      value: true,
-                      message: "Es necesario seleccionar una especialidad",
-                    },
-                  })}
-                >
-                  <option value="option1">General</option>
-                  <option value="option2">Ortodoncia y Ortopedia</option>
-                  <option value="option3">Cirujia Maxilofacial</option>
-                </Select>
-              </FormControl>
-              <Stack spacing={10} mt={8}>
-                <Button
-                  colorScheme="idm"
-                  isLoading={isSubmitting}
-                  type="submit"
-                >
-                  Siguiente
-                </Button>
-              </Stack>
-            </form>
+
+    <Stack spacing={8}>
+      <Heading fontSize={"4xl"} color="idm.800">
+        Registrar nueva cuenta IDM
+      </Heading>
+      <form>
+        <Heading as="h3" size="md">Datos de la cuenta</Heading>
+        <Grid templateColumns={{ base: "1fr", lg: "1fr 1fr" }} gap={4} mt={4}>
+          <FormControl id="email" isRequired>
+            <FormLabel>Correo electrónico</FormLabel>
+            <Input placeholder="Correo electrónico" />
+          </FormControl>
+          <FormControl id="password" isRequired>
+            <FormLabel>Contraseña</FormLabel>
+            <Input placeholder="Contraseña" />
+          </FormControl>
+          <FormControl id="cpassword" isRequired>
+            <FormLabel>Comfirmar contraseña</FormLabel>
+            <Input placeholder="Comfirmar contraseña" />
+          </FormControl>
+        </Grid>
+        <Divider my={8} />
+        <Heading as="h3" size="md">Datos del doctor</Heading>
+        <Grid templateColumns={{ base: "1fr", lg: "1fr 1fr" }} gap={4} mt={4}>
+          <FormControl id="nombre" isRequired>
+            <FormLabel>Nombre(s)</FormLabel>
+            <Input placeholder="Nombre(s)" />
+          </FormControl>
+          <FormControl id="apellidos" isRequired>
+            <FormLabel>Apellidos</FormLabel>
+            <Input placeholder="Apellidos" />
+          </FormControl>
+          <FormControl id="tel" isRequired>
+            <FormLabel>Telefono</FormLabel>
+            <Input placeholder="Telefono a 10 digitos" />
+          </FormControl>
+          <FormControl id="fecha_nacimiento" isRequired>
+            <FormLabel>Fecha de nacimiento</FormLabel>
+            <Input type="date" />
+          </FormControl>
+          <FormControl id="especialidad" isRequired>
+            <FormLabel>Especialidad</FormLabel>
+            <Select placeholder="Seleccionar especialidad">
+              <option>General</option>
+              <option>Ortidoncia y Ortopedia</option>
+              <option>Cirugia maxilofacial</option>
+              <option>Endodoncia</option>
+              <option>Periodoncia</option>
+              <option>Implantologia</option>
+              <option>Odontopediatria</option>
+              <option>Odontogediatria</option>
+              <option>Protesis</option>
+              <option>Otra</option>
+            </Select>
+          </FormControl>
+        </Grid>
+        <Divider my={8} />
+        <Heading as="h3" size="md">Datos de consultorio</Heading>
+        <Grid templateColumns={{ base: "1fr" }} gap={4} mt={4}>
+          <FormControl id="fecha_nacimiento" isRequired>
+            <FormLabel>Dirección</FormLabel>
+            <Textarea placeholder="Ingresar la dirección de su consultorio" />
+          </FormControl>
+        </Grid>
+        <Stack>
+          <Button colorScheme="idm" mt={8} mx={"auto"}  >Crear cuenta</Button>
+          <Stack direction="horizontal" justifyContent={"center"}>
+            <Text>¿Ya tiene una cuenta de IDM Cloud?</Text>
+            <LinkTo to="/"><Link ml={2} color="idm.800">Ingresar</Link></LinkTo>
           </Stack>
-        </Box>
-      </Stack>
-    </Center>
+        </Stack>
+
+      </form>
+    </Stack >
   );
 }
