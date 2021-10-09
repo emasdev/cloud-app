@@ -67,7 +67,7 @@ export default function SignupForm() {
             <Input placeholder="Contraseña" />
           </FormControl>
           <FormControl id="cpassword" isRequired>
-            <FormLabel>Comfirmar contraseña</FormLabel>
+            <FormLabel>Confirmar contraseña</FormLabel>
             <Input placeholder="Comfirmar contraseña" />
           </FormControl>
         </Grid>
@@ -118,7 +118,7 @@ export default function SignupForm() {
           <Button colorScheme="idm" mt={8} mx={"auto"}  >Crear cuenta</Button>
           <Stack direction="horizontal" justifyContent={"center"}>
             <Text>¿Ya tiene una cuenta de IDM Cloud?</Text>
-            <LinkTo to="/"><Link ml={2} color="idm.800">Ingresar</Link></LinkTo>
+            <Link as={LinkTo} ml={2} color="idm.800" to="/">Ingresar</Link>
           </Stack>
         </Stack>
 

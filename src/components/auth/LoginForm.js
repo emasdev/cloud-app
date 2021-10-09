@@ -19,24 +19,27 @@ import { useForm } from "react-hook-form";
 import { useAuth } from "../../hooks/useAuth";
 
 export default function LoginForm() {
+
+  const { doSignInWithEmailAndPassword } = useAuth();
+  const history = useHistory();
+
   const {
     register,
     handleSubmit,
-    formState: { errors, isSubmitSuccessful, isSubmitting },
+    formState: { errors, isSubmitting },
   } = useForm();
 
-  const { login } = useAuth();
-  const history = useHistory();
-
-  const onSubmit = async (data) => {
+  const onSubmit = async (values) => {
+    console.log('onsubmit');
+    console.log(errors)
+    let user = null;
     try {
-      await login(data.email, data.password);
+      user = await doSignInWithEmailAndPassword(values.email, values.password);
       history.push("/");
-    } catch (error) {
-      console.log(error.message);
+    } catch (e) {
+      console.error(e.message);
     }
   };
-
   return (
     <Center>
       <Stack spacing={8} mx={"auto"} maxW={"lg"} py={12} px={6}>
@@ -59,16 +62,9 @@ export default function LoginForm() {
               <Alert status="error" variant="subtle" mt={6} mb={6}>
                 <AlertIcon />
                 {errors.email.message}
-                <AlertIcon />
                 {errors.password.message}
               </Alert>
             )}
-            {/* {isSubmitSuccessful && (
-              <Alert status="success" variant="subtle" mt={6} mb={6}>
-                <AlertIcon></AlertIcon>
-                Se le ha enviado una confirmación a su correo electronico.
-              </Alert>
-            )} */}
 
             <form onSubmit={handleSubmit(onSubmit)}>
               <FormControl id="email">
@@ -116,7 +112,7 @@ export default function LoginForm() {
                 >
                   Ingresar
                 </Button>
-                <Link color={"blue.400"} textAlign="center">¿Olvidaste tu password?</Link>
+                <Link color={"idm.500"} textAlign="center">¿Olvidaste tu password?</Link>
               </Stack>
               <Stack mt={4}>
                 <Button onClick={() => history.push("/signup")}>

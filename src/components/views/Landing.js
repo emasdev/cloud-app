@@ -21,9 +21,7 @@ const Landing = () => {
     <Grid templateColumns={{
       base: "1fr", md: "1fr 1fr", xl: "2fr 1fr"
     }} minH="100vh" >
-      <Box w="100%"
-      //  bg="blue.800" 
-      >
+      <Box w="100%">
         <Center h="100%">
           <VStack spacing={4}>
             <Box>
