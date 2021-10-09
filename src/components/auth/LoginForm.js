@@ -10,13 +10,17 @@ import {
   useColorModeValue,
   Center,
   Alert,
-  AlertIcon,
-  Link
+  Link,
+  List,
+  ListItem,
+  ListIcon
 } from "@chakra-ui/react";
+import { WarningIcon } from '@chakra-ui/icons'
 import { useHistory } from "react-router";
 
 import { useForm } from "react-hook-form";
 import { useAuth } from "../../hooks/useAuth";
+import { v4 as uuidv4 } from 'uuid';
 
 export default function LoginForm() {
 
@@ -30,8 +34,7 @@ export default function LoginForm() {
   } = useForm();
 
   const onSubmit = async (values) => {
-    console.log('onsubmit');
-    console.log(errors)
+    console.log(values);
     let user = null;
     try {
       user = await doSignInWithEmailAndPassword(values.email, values.password);
@@ -58,11 +61,21 @@ export default function LoginForm() {
           p={8}
         >
           <Stack spacing={4}>
-            {errors.size && (
-              <Alert status="error" variant="subtle" mt={6} mb={6}>
-                <AlertIcon />
-                {errors.email.message}
-                {errors.password.message}
+            {Object.keys(errors).length > 0 && (
+              <Alert
+                status="error"
+                variant="left-accent"
+                rounded="md"
+                my={6}>
+                <List>
+                  {Object.entries(errors).map((error) => (
+
+                    <ListItem my={4} key={uuidv4()}>
+                      <ListIcon as={WarningIcon} w={4} h={4} color="red.500" />
+                      {error[1].message}
+                    </ListItem>
+                  ))}
+                </List>
               </Alert>
             )}
 
@@ -93,7 +106,7 @@ export default function LoginForm() {
                   {...register("password", {
                     required: {
                       value: true,
-                      message: "Es necesario escribir un password correcto",
+                      message: "Es necesario escribir el password",
                     },
                     minLength: {
                       value: 6,

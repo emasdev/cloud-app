@@ -1,8 +1,7 @@
 import {
-  Flex,
-  Box,
   FormControl,
   FormLabel,
+  FormHelperText,
   Input,
   Checkbox,
   Stack,
@@ -10,11 +9,6 @@ import {
   Heading,
   Text,
   Textarea,
-  useColorModeValue,
-  Center,
-  Alert,
-  AlertIcon,
-  SimpleGrid,
   Select,
   Grid,
   Divider,
@@ -112,6 +106,7 @@ export default function SignupForm() {
           <FormControl id="fecha_nacimiento" isRequired>
             <FormLabel>Dirección</FormLabel>
             <Textarea placeholder="Ingresar la dirección de su consultorio" />
+            <FormHelperText>Dirección en la que se le entregarian los estudios físicos en caso que los requiera.</FormHelperText>
           </FormControl>
         </Grid>
         <Stack>
