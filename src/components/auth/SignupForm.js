@@ -47,7 +47,7 @@ export default function SignupForm() {
 
     <Stack spacing={8}>
       <Heading fontSize={"4xl"} color="idm.800">
-        Registrar nueva cuenta IDM
+        Registrar nueva cuenta
       </Heading>
       <form>
         <Heading as="h3" size="md">Datos de la cuenta</Heading>
@@ -66,18 +66,22 @@ export default function SignupForm() {
           </FormControl>
         </Grid>
         <Divider my={8} />
-        <Heading as="h3" size="md">Datos del doctor</Heading>
+        <Heading as="h3" size="md">Datos del Doctor</Heading>
         <Grid templateColumns={{ base: "1fr", lg: "1fr 1fr" }} gap={4} mt={4}>
           <FormControl id="nombre" isRequired>
             <FormLabel>Nombre(s)</FormLabel>
             <Input placeholder="Nombre(s)" />
           </FormControl>
-          <FormControl id="apellidos" isRequired>
-            <FormLabel>Apellidos</FormLabel>
-            <Input placeholder="Apellidos" />
+          <FormControl id="apellido_paterno" isRequired>
+            <FormLabel>Apellido paterno</FormLabel>
+            <Input placeholder="Apellido paterno" />
+          </FormControl>
+          <FormControl id="apellido_materno" isRequired>
+            <FormLabel>Apellido materno</FormLabel>
+            <Input placeholder="Apellido materno" />
           </FormControl>
           <FormControl id="tel" isRequired>
-            <FormLabel>Telefono</FormLabel>
+            <FormLabel>Telefono móvil</FormLabel>
             <Input placeholder="Telefono a 10 digitos" />
           </FormControl>
           <FormControl id="fecha_nacimiento" isRequired>
