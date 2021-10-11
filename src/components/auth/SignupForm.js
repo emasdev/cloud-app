@@ -1,3 +1,5 @@
+
+import React, { useRef } from "react";
 import {
   FormControl,
   FormLabel,
@@ -12,7 +14,10 @@ import {
   Select,
   Grid,
   Divider,
-  Link
+  Link,
+  Alert,
+  AlertIcon,
+  AlertDescription
 } from "@chakra-ui/react";
 import { useHistory, Link as LinkTo } from "react-router-dom";
 
@@ -20,23 +25,41 @@ import { useForm } from "react-hook-form";
 import { useAuth } from "../../hooks/useAuth";
 
 export default function SignupForm() {
+
+  const { doCreateUserWithEmailAndPassword, doCreateUserDoc } = useAuth();
   const history = useHistory();
 
   const {
     register,
     handleSubmit,
     setError,
-    formState: { errors, isSubmitSuccessful, isSubmitting },
+    watch,
+    formState: { errors, isSubmitting },
   } = useForm();
 
-  const { signup } = useAuth();
+  const password = useRef({});
+  password.current = watch("password", "");
 
-  const onSubmit = async (data) => {
+  const onSubmit = async (values) => {
+    let user = null;
+    let isDocCreated = null;
     try {
-      await signup(data.email, data.password);
+      user = await doCreateUserWithEmailAndPassword(
+        values.email,
+        values.password
+      );
+      isDocCreated = await doCreateUserDoc(user, {
+        nombre: values.nombre,
+        apellido_paterno: values.apellido_paterno,
+        apellido_materno: values.apellido_materno,
+        tel: values.tel,
+        fecha_nacimiento: values.fecha_nacimiento,
+        especialidad: values.especialidad,
+        dir_consultorio: values.dir_consultorio,
+      });
       history.push("/");
     } catch (error) {
-      setError("email", {
+      setError("firebase", {
         type: "manual",
         message: error.message,
       });
@@ -49,48 +72,178 @@ export default function SignupForm() {
       <Heading fontSize={"4xl"} color="idm.800">
         Registrar nueva cuenta
       </Heading>
-      <form>
+      {errors.firebase && (
+        <Alert
+          status="error"
+          variant="left-accent"
+          rounded="md"
+          my={6}>
+          <AlertIcon />
+          <AlertDescription>{errors.firebase.message}</AlertDescription>
+        </Alert>
+      )}
+      <form onSubmit={handleSubmit(onSubmit)}>
         <Heading as="h3" size="md">Datos de la cuenta</Heading>
         <Grid templateColumns={{ base: "1fr", lg: "1fr 1fr" }} gap={4} mt={4}>
-          <FormControl id="email" isRequired>
+          <FormControl id="email">
             <FormLabel>Correo electrónico</FormLabel>
-            <Input placeholder="Correo electrónico" />
+            <Input placeholder="Correo electrónico"
+              {...register("email", {
+                required: {
+                  value: true,
+                  message:
+                    "Este campo es obligatorio",
+                },
+                pattern: /^\S+@\S+$/i,
+              })} />
+            {errors.email && (
+              <Alert status="error" rounded="md" variant="left-accent" mt={2}>
+                <AlertIcon />
+                <AlertDescription>{errors.email.message}</AlertDescription>
+              </Alert>
+            )}
           </FormControl>
-          <FormControl id="password" isRequired>
+          <FormControl id="password">
             <FormLabel>Contraseña</FormLabel>
-            <Input placeholder="Contraseña" />
+            <Input
+              placeholder="Contraseña"
+              type="password"
+              {...register("password", {
+                required: {
+                  value: true,
+                  message: "Este campo es obligatorio",
+                },
+                minLength: {
+                  value: 6,
+                  message:
+                    "El password tiene que tener 6 carácteres por lo menos",
+                },
+              })} />
+            {errors.password && (
+              <Alert status="error" rounded="md" variant="left-accent" mt={2}>
+                <AlertIcon />
+                <AlertDescription>{errors.password.message}</AlertDescription>
+              </Alert>
+            )}
           </FormControl>
-          <FormControl id="cpassword" isRequired>
+          <FormControl id="cpassword">
             <FormLabel>Confirmar contraseña</FormLabel>
-            <Input placeholder="Comfirmar contraseña" />
+            <Input
+              placeholder="Comfirmar contraseña"
+              type="password"
+              {...register("cpassword", {
+                required: {
+                  value: true,
+                  message: "Este campo es obligatorio",
+                },
+                validate: value =>
+                  value === password.current || "Los passwords deben ser   iguales"
+              })} />
+            {errors.cpassword && (
+              <Alert status="error" rounded="md" variant="left-accent" mt={2}>
+                <AlertIcon />
+                <AlertDescription>{errors.cpassword.message}</AlertDescription>
+              </Alert>
+            )}
           </FormControl>
         </Grid>
         <Divider my={8} />
         <Heading as="h3" size="md">Datos del Doctor</Heading>
         <Grid templateColumns={{ base: "1fr", lg: "1fr 1fr" }} gap={4} mt={4}>
-          <FormControl id="nombre" isRequired>
+          <FormControl id="nombre">
             <FormLabel>Nombre(s)</FormLabel>
-            <Input placeholder="Nombre(s)" />
+            <Input placeholder="Nombre(s)"
+              {...register("nombre", {
+                required: {
+                  value: true,
+                  message:
+                    "Este campo es obligatorio",
+                }
+              })} />
+            {errors.nombre && (
+              <Alert status="error" rounded="md" variant="left-accent" mt={2}>
+                <AlertIcon />
+                <AlertDescription>{errors.nombre.message}</AlertDescription>
+              </Alert>
+            )}
           </FormControl>
-          <FormControl id="apellido_paterno" isRequired>
+          <FormControl id="apellido_paterno">
             <FormLabel>Apellido paterno</FormLabel>
-            <Input placeholder="Apellido paterno" />
+            <Input placeholder="Apellido paterno"
+              {...register("apellido_paterno", {
+                required: {
+                  value: true,
+                  message:
+                    "Este campo es obligatorio",
+                }
+              })} />
+            {errors.apellido_paterno && (
+              <Alert status="error" rounded="md" variant="left-accent" mt={2}>
+                <AlertIcon />
+                <AlertDescription>{errors.apellido_paterno.message}</AlertDescription>
+              </Alert>
+            )}
           </FormControl>
-          <FormControl id="apellido_materno" isRequired>
+          <FormControl id="apellido_materno">
             <FormLabel>Apellido materno</FormLabel>
-            <Input placeholder="Apellido materno" />
+            <Input placeholder="Apellido materno"
+              {...register("apellido_materno", {
+                required: {
+                  value: true,
+                  message:
+                    "Este campo es obligatorio",
+                }
+              })} />
+            {errors.apellido_materno && (
+              <Alert status="error" rounded="md" variant="left-accent" mt={2}>
+                <AlertIcon />
+                <AlertDescription>{errors.apellido_materno.message}</AlertDescription>
+              </Alert>
+            )}
           </FormControl>
-          <FormControl id="tel" isRequired>
+          <FormControl id="tel">
             <FormLabel>Telefono móvil</FormLabel>
-            <Input placeholder="Telefono a 10 digitos" />
+            <Input placeholder="Telefono a 10 digitos" {...register("tel", {
+              required: {
+                value: true,
+                message:
+                  "Este campo es obligatorio",
+              }
+            })} />
+            {errors.tel && (
+              <Alert status="error" rounded="md" variant="left-accent" mt={2}>
+                <AlertIcon />
+                <AlertDescription>{errors.tel.message}</AlertDescription>
+              </Alert>
+            )}
           </FormControl>
-          <FormControl id="fecha_nacimiento" isRequired>
+          <FormControl id="fecha_nacimiento">
             <FormLabel>Fecha de nacimiento</FormLabel>
-            <Input type="date" />
+            <Input type="date"
+              {...register("fecha_nacimiento", {
+                required: {
+                  value: true,
+                  message:
+                    "Este campo es obligatorio",
+                }
+              })} />
+            {errors.fecha_nacimiento && (
+              <Alert status="error" rounded="md" variant="left-accent" mt={2}>
+                <AlertIcon />
+                <AlertDescription>{errors.fecha_nacimiento.message}</AlertDescription>
+              </Alert>
+            )}
           </FormControl>
-          <FormControl id="especialidad" isRequired>
+          <FormControl id="especialidad">
             <FormLabel>Especialidad</FormLabel>
-            <Select placeholder="Seleccionar especialidad">
+            <Select placeholder="Seleccionar especialidad"
+              {...register("especialidad", {
+                required: {
+                  value: true,
+                  message:
+                    "Este campo es obligatorio",
+                }
+              })}>
               <option>General</option>
               <option>Ortidoncia y Ortopedia</option>
               <option>Cirugia maxilofacial</option>
@@ -102,19 +255,43 @@ export default function SignupForm() {
               <option>Protesis</option>
               <option>Otra</option>
             </Select>
+            {errors.especialidad && (
+              <Alert status="error" rounded="md" variant="left-accent" mt={2}>
+                <AlertIcon />
+                <AlertDescription>{errors.especialidad.message}</AlertDescription>
+              </Alert>
+            )}
           </FormControl>
         </Grid>
         <Divider my={8} />
         <Heading as="h3" size="md">Datos de consultorio</Heading>
         <Grid templateColumns={{ base: "1fr" }} gap={4} mt={4}>
-          <FormControl id="fecha_nacimiento" isRequired>
+          <FormControl id="dir_consultorio">
             <FormLabel>Dirección</FormLabel>
-            <Textarea placeholder="Ingresar la dirección de su consultorio" />
+            <Textarea placeholder="Ingresar la dirección de su consultorio"
+              {...register("dir_consultorio", {
+                required: {
+                  value: true,
+                  message:
+                    "Este campo es obligatorio",
+                }
+              })} />
+            {errors.dir_consultorio && (
+              <Alert status="error" rounded="md" variant="left-accent" mt={2}>
+                <AlertIcon />
+                <AlertDescription>{errors.dir_consultorio.message}</AlertDescription>
+              </Alert>
+            )}
             <FormHelperText>Dirección en la que se le entregarian los estudios físicos en caso que los requiera.</FormHelperText>
           </FormControl>
         </Grid>
         <Stack>
-          <Button colorScheme="idm" mt={8} mx={"auto"}  >Crear cuenta</Button>
+          <Button
+            colorScheme="idm"
+            mt={8} mx={"auto"}
+            isLoading={isSubmitting}
+            type="submit" >Crear cuenta
+          </Button>
           <Stack direction="horizontal" justifyContent={"center"}>
             <Text>¿Ya tiene una cuenta de IDM Cloud?</Text>
             <Link as={LinkTo} ml={2} color="idm.800" to="/">Ingresar</Link>

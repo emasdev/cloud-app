@@ -38,19 +38,21 @@ export const AuthProvider = ({ children }) => {
 
   useEffect(() => {
     onAuthStateChanged(auth, (user) => {
-      setIsAuthenticating(false);
+
       if (user) {
         console.log("user is in");
-        setUser(user);
         if (!userData) {
           const docRef = doc(db, "usuarios", user.uid);
           getDoc(docRef).then((docSnap) => {
             if (docSnap.exists()) {
               setUserData(docSnap.data());
+              setUser(user);
+              setIsAuthenticating(false);
             }
           });
         }
       } else {
+        setIsAuthenticating(false);
         console.log("no user in");
       }
     });
@@ -83,10 +85,7 @@ export const AuthProvider = ({ children }) => {
   const doCreateUserDoc = async (user, data) => {
     let isCreated = false;
     try {
-      await setDoc(doc(db, "usuarios", user.uid), {
-        nombre: data.nombre,
-        apellidos: data.apellidos,
-      });
+      await setDoc(doc(db, "usuarios", user.uid), data);
       setUserData(doc);
       isCreated = true;
     } catch (e) {
