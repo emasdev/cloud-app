@@ -10,12 +10,13 @@ import {
   useColorModeValue,
   Center,
   Alert,
+  AlertIcon,
+  AlertDescription,
   Link,
   List,
   ListItem,
   ListIcon
 } from "@chakra-ui/react";
-import { WarningIcon } from '@chakra-ui/icons'
 import { useHistory } from "react-router";
 
 import { useForm } from "react-hook-form";
@@ -30,6 +31,7 @@ export default function LoginForm() {
   const {
     register,
     handleSubmit,
+    setError,
     formState: { errors, isSubmitting },
   } = useForm();
 
@@ -40,7 +42,11 @@ export default function LoginForm() {
       user = await doSignInWithEmailAndPassword(values.email, values.password);
       history.push("/");
     } catch (e) {
-      console.error(e.message);
+      console.log(e);
+      setError("firebase", {
+        type: "manual",
+        message: "El correo electrónico y/o password es incorrecto",
+      });
     }
   };
   return (
@@ -61,21 +67,14 @@ export default function LoginForm() {
           p={8}
         >
           <Stack spacing={4}>
-            {Object.keys(errors).length > 0 && (
+            {errors.firebase && (
               <Alert
                 status="error"
                 variant="left-accent"
                 rounded="md"
                 my={6}>
-                <List>
-                  {Object.entries(errors).map((error) => (
-
-                    <ListItem my={4} key={uuidv4()}>
-                      <ListIcon as={WarningIcon} w={4} h={4} color="red.500" />
-                      {error[1].message}
-                    </ListItem>
-                  ))}
-                </List>
+                <AlertIcon />
+                <AlertDescription>{errors.firebase.message}</AlertDescription>
               </Alert>
             )}
 
@@ -86,7 +85,6 @@ export default function LoginForm() {
                 </FormLabel>
                 <Input
                   placeholder="Email"
-                  type="email"
                   {...register("email", {
                     required: {
                       value: true,
@@ -96,6 +94,12 @@ export default function LoginForm() {
                     pattern: /^\S+@\S+$/i,
                   })}
                 />
+                {errors.email && (
+                  <Alert status="error" rounded="md" variant="left-accent" mt={2}>
+                    <AlertIcon />
+                    <AlertDescription>{errors.email.message}</AlertDescription>
+                  </Alert>
+                )}
               </FormControl>
               <FormControl id="password" mt={3}>
                 <FormLabel color={"gray.600"}>Password</FormLabel>
@@ -115,6 +119,12 @@ export default function LoginForm() {
                     },
                   })}
                 />
+                {errors.password && (
+                  <Alert status="error" rounded="md" variant="left-accent" mt={2}>
+                    <AlertIcon />
+                    <AlertDescription>{errors.password.message}</AlertDescription>
+                  </Alert>
+                )}
               </FormControl>
               <Stack mt={4}>
                 <Button
