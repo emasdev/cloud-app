@@ -1,3 +1,4 @@
+import React, { useState } from "react";
 import {
   Box,
   FormControl,
@@ -15,18 +16,23 @@ import {
   Link,
   List,
   ListItem,
-  ListIcon
+  ListIcon,
+  InputGroup,
+  InputRightElement,
+  Icon,
 } from "@chakra-ui/react";
+import { FiEye, FiEyeOff } from "react-icons/fi";
 import { useHistory } from "react-router";
 
 import { useForm } from "react-hook-form";
 import { useAuth } from "../../hooks/useAuth";
-import { v4 as uuidv4 } from 'uuid';
+import { v4 as uuidv4 } from "uuid";
 
 export default function LoginForm() {
-
   const { doSignInWithEmailAndPassword } = useAuth();
   const history = useHistory();
+
+  const [show, setShow] = useState(false);
 
   const {
     register,
@@ -49,10 +55,11 @@ export default function LoginForm() {
       });
     }
   };
+
   return (
     <Center>
       <Stack spacing={8} mx={"auto"} maxW={"lg"} py={12} px={6}>
-        <Stack >
+        <Stack>
           <Heading fontSize={"4xl"} color={"idm.500"}>
             IDM Cloud
           </Heading>
@@ -68,11 +75,7 @@ export default function LoginForm() {
         >
           <Stack spacing={4}>
             {errors.firebase && (
-              <Alert
-                status="error"
-                variant="left-accent"
-                rounded="md"
-                my={6}>
+              <Alert status="error" variant="left-accent" rounded="md" my={6}>
                 <AlertIcon />
                 <AlertDescription>{errors.firebase.message}</AlertDescription>
               </Alert>
@@ -80,22 +83,24 @@ export default function LoginForm() {
 
             <form onSubmit={handleSubmit(onSubmit)}>
               <FormControl id="email">
-                <FormLabel color={"gray.600"}>
-                  Correo Electrónico
-                </FormLabel>
+                <FormLabel color={"gray.600"}>Correo Electrónico</FormLabel>
                 <Input
                   placeholder="Email"
                   {...register("email", {
                     required: {
                       value: true,
-                      message:
-                        "Este campo es obligatorio",
+                      message: "Este campo es obligatorio",
                     },
                     pattern: /^\S+@\S+$/i,
                   })}
                 />
                 {errors.email && (
-                  <Alert status="error" rounded="md" variant="left-accent" mt={2}>
+                  <Alert
+                    status="error"
+                    rounded="md"
+                    variant="left-accent"
+                    mt={2}
+                  >
                     <AlertIcon />
                     <AlertDescription>{errors.email.message}</AlertDescription>
                   </Alert>
@@ -103,26 +108,44 @@ export default function LoginForm() {
               </FormControl>
               <FormControl id="password" mt={3}>
                 <FormLabel color={"gray.600"}>Password</FormLabel>
-                <Input
-                  name="password"
-                  placeholder="Password"
-                  type="password"
-                  {...register("password", {
-                    required: {
-                      value: true,
-                      message: "Este campo es obligatorio",
-                    },
-                    minLength: {
-                      value: 6,
-                      message:
-                        "El password debe contener minimo 6 caracteres",
-                    },
-                  })}
-                />
+                <InputGroup size="md">
+                  <Input
+                    pr="4.5rem"
+                    type={show ? "text" : "password"}
+                    placeholder="Password"
+                    {...register("password", {
+                      required: {
+                        value: true,
+                        message: "Este campo es obligatorio",
+                      },
+                      minLength: {
+                        value: 6,
+                        message:
+                          "El password debe contener minimo 6 caracteres",
+                      },
+                    })}
+                  />
+                  <InputRightElement width="4.5rem">
+                    <Button
+                      h="1.75rem"
+                      size="sm"
+                      onClick={() => setShow(!show)}
+                      leftIcon={<Icon as={show ? FiEyeOff : FiEye} />}
+                    ></Button>
+                  </InputRightElement>
+                </InputGroup>
+
                 {errors.password && (
-                  <Alert status="error" rounded="md" variant="left-accent" mt={2}>
+                  <Alert
+                    status="error"
+                    rounded="md"
+                    variant="left-accent"
+                    mt={2}
+                  >
                     <AlertIcon />
-                    <AlertDescription>{errors.password.message}</AlertDescription>
+                    <AlertDescription>
+                      {errors.password.message}
+                    </AlertDescription>
                   </Alert>
                 )}
               </FormControl>
@@ -135,7 +158,9 @@ export default function LoginForm() {
                 >
                   Ingresar
                 </Button>
-                <Link color={"idm.500"} textAlign="center">¿Olvidaste tu password?</Link>
+                <Link color={"idm.500"} textAlign="center">
+                  ¿Olvidaste tu password?
+                </Link>
               </Stack>
               <Stack mt={4}>
                 <Button onClick={() => history.push("/signup")}>
