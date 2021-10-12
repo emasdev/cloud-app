@@ -42,16 +42,14 @@ export const AuthProvider = ({ children }) => {
 
       if (user) {
         console.log("user is in");
-        if (!userData) {
-          const docRef = doc(db, "usuarios", user.uid);
-          getDoc(docRef).then((docSnap) => {
-            if (docSnap.exists()) {
-              setUserData(docSnap.data());
-              setUser(user);
-              setIsAuthenticating(false);
-            }
-          });
-        }
+        const docRef = doc(db, "usuarios", user.uid);
+        getDoc(docRef).then((docSnap) => {
+          if (docSnap.exists()) {
+            setUserData(docSnap.data());
+            setUser(user);
+            setIsAuthenticating(false);
+          }
+        });
       } else {
         setIsAuthenticating(false);
         setUserData(null);
@@ -59,7 +57,7 @@ export const AuthProvider = ({ children }) => {
         console.log("no user in");
       }
     });
-  }, [auth, db, userData]);
+  }, [auth, db]);
 
   // useEffect(() => {
 

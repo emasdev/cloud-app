@@ -3,7 +3,7 @@ import React from "react";
 
 const Loading = ({ children }) => {
   return (
-    <Center minH="100vh" bgGradient="linear(to-r, gray.200, gray.500)">
+    <Center minH="100vh" bgGradient="linear(to-r, idm.200, idm.800)">
       <Spinner size="xl" />
     </Center>
   );
