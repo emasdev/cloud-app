@@ -10,6 +10,7 @@ import {
   Flex,
   Button,
 } from "@chakra-ui/react";
+import { useHistory } from "react-router-dom";
 
 import LoginForm from "../auth/LoginForm";
 import { useAuth } from "../../hooks/useAuth";
@@ -17,7 +18,8 @@ import { useAuth } from "../../hooks/useAuth";
 import heroImg from "../../img/hero.png";
 
 const Landing = () => {
-  const { user, userData } = useAuth();
+  const { user, userData, doSignOut } = useAuth();
+  const history = useHistory();
   if (!user && !userData) {
     return (
       <Grid templateColumns={{
@@ -73,10 +75,16 @@ const Landing = () => {
         </Box>
         <Stack spacing={8} p={4}>
           <Flex justifyContent="flex-end">
-            <Button>Cerrar sesión</Button>
+            <Button
+              onClick={async e => {
+                await doSignOut()
+                history.push("/")
+              }}>Cerrar sesión</Button>
           </Flex>
           <Box>
-            <Text>{userData.nombre} {userData.apellido_paterno} {userData.apellido_materno}</Text>
+            {userData && Object.entries(userData).map(value => {
+              return (<Text>{value} </Text>)
+            })}
           </Box>
         </Stack>
       </Grid>

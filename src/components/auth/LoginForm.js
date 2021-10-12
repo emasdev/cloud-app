@@ -89,7 +89,7 @@ export default function LoginForm() {
                     required: {
                       value: true,
                       message:
-                        "Es necesario escribir un email asociado a su cuenta IDM",
+                        "Este campo es obligatorio",
                     },
                     pattern: /^\S+@\S+$/i,
                   })}
@@ -110,12 +110,12 @@ export default function LoginForm() {
                   {...register("password", {
                     required: {
                       value: true,
-                      message: "Es necesario escribir el password",
+                      message: "Este campo es obligatorio",
                     },
                     minLength: {
                       value: 6,
                       message:
-                        "El password tiene que tener 6 carácteres por lo menos",
+                        "El password debe contener minimo 6 caracteres",
                     },
                   })}
                 />

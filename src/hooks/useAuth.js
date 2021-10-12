@@ -37,6 +37,7 @@ export const AuthProvider = ({ children }) => {
   const db = getFirestore();
 
   useEffect(() => {
+    console.log("useAuth effect");
     onAuthStateChanged(auth, (user) => {
 
       if (user) {
@@ -53,6 +54,8 @@ export const AuthProvider = ({ children }) => {
         }
       } else {
         setIsAuthenticating(false);
+        setUserData(null);
+        setUser(null);
         console.log("no user in");
       }
     });
@@ -113,8 +116,6 @@ export const AuthProvider = ({ children }) => {
     try {
       await signOut(auth);
       isSignedOut = true;
-      setUserData(null);
-      setUser(null);
     } catch (e) {
       console.error(e.message);
     }
