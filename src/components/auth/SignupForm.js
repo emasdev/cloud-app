@@ -1,10 +1,12 @@
 
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
 import {
   FormControl,
   FormLabel,
   FormHelperText,
+  InputGroup,
   Input,
+  InputRightElement,
   Checkbox,
   Stack,
   Button,
@@ -17,10 +19,11 @@ import {
   Link,
   Alert,
   AlertIcon,
-  AlertDescription
+  AlertDescription,
+  Icon
 } from "@chakra-ui/react";
 import { useHistory, Link as LinkTo } from "react-router-dom";
-
+import { FiEye, FiEyeOff } from "react-icons/fi";
 import { useForm } from "react-hook-form";
 import { useAuth } from "../../hooks/useAuth";
 
@@ -28,6 +31,9 @@ export default function SignupForm() {
 
   const { doCreateUserWithEmailAndPassword, doCreateUserDoc } = useAuth();
   const history = useHistory();
+
+  const [show, setShow] = useState(false);
+  const [show2, setShow2] = useState(false);
 
   const {
     register,
@@ -105,20 +111,30 @@ export default function SignupForm() {
           </FormControl>
           <FormControl id="password">
             <FormLabel>Contraseña</FormLabel>
-            <Input
-              placeholder="Contraseña"
-              type="password"
-              {...register("password", {
-                required: {
-                  value: true,
-                  message: "Este campo es obligatorio",
-                },
-                minLength: {
-                  value: 6,
-                  message:
-                    "El password tiene que tener 6 carácteres por lo menos",
-                },
-              })} />
+            <InputGroup size="md">
+              <Input
+                placeholder="Contraseña"
+                type="password"
+                {...register("password", {
+                  required: {
+                    value: true,
+                    message: "Este campo es obligatorio",
+                  },
+                  minLength: {
+                    value: 6,
+                    message:
+                      "El password tiene que tener 6 carácteres por lo menos",
+                  },
+                })} />
+              <InputRightElement width="4.5rem">
+                <Button
+                  h="1.75rem"
+                  size="sm"
+                  onClick={() => setShow(!show)}
+                  leftIcon={<Icon as={show ? FiEyeOff : FiEye} />}
+                ></Button>
+              </InputRightElement>
+            </InputGroup>
             {errors.password && (
               <Alert status="error" rounded="md" variant="left-accent" mt={2}>
                 <AlertIcon />
@@ -128,17 +144,27 @@ export default function SignupForm() {
           </FormControl>
           <FormControl id="cpassword">
             <FormLabel>Confirmar contraseña</FormLabel>
-            <Input
-              placeholder="Comfirmar contraseña"
-              type="password"
-              {...register("cpassword", {
-                required: {
-                  value: true,
-                  message: "Este campo es obligatorio",
-                },
-                validate: value =>
-                  value === password.current || "Los passwords deben ser   iguales"
-              })} />
+            <InputGroup size="md">
+              <Input
+                placeholder="Comfirmar contraseña"
+                type="password"
+                {...register("cpassword", {
+                  required: {
+                    value: true,
+                    message: "Este campo es obligatorio",
+                  },
+                  validate: value =>
+                    value === password.current || "Los passwords deben ser   iguales"
+                })} />
+              <InputRightElement width="4.5rem">
+                <Button
+                  h="1.75rem"
+                  size="sm"
+                  onClick={() => setShow2(!show2)}
+                  leftIcon={<Icon as={show2 ? FiEyeOff : FiEye} />}
+                ></Button>
+              </InputRightElement>
+            </InputGroup>
             {errors.cpassword && (
               <Alert status="error" rounded="md" variant="left-accent" mt={2}>
                 <AlertIcon />
