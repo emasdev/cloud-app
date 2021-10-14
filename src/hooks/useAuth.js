@@ -112,7 +112,10 @@ export const AuthProvider = ({ children }) => {
   const doSignOut = async () => {
     let isSignedOut = false;
     try {
+      setUser(null);
+      setUserData(null);
       await signOut(auth);
+
       isSignedOut = true;
     } catch (e) {
       console.error(e.message);
@@ -141,6 +144,7 @@ export const AuthProvider = ({ children }) => {
     user,
     userData,
     isAuthenticating,
+    setIsAuthenticating,
     doSignInWithEmailAndPassword,
     doCreateUserWithEmailAndPassword,
     doCreateUserDoc,

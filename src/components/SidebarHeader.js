@@ -130,8 +130,13 @@ const NavItem = ({ icon, children, ...rest }) => {
 };
 
 const MobileNav = ({ onOpen, ...rest }) => {
-  const { userData, doSignOut } = useAuth();
+  const { userData, doSignOut, setIsAuthenticating } = useAuth();
   const history = useHistory();
+
+  const handleClick = () => {
+    setIsAuthenticating(true);
+    doSignOut();
+  }
   return (
     <Flex
       ml={{ base: 0, md: 60 }}
@@ -196,7 +201,7 @@ const MobileNav = ({ onOpen, ...rest }) => {
               borderColor={useColorModeValue('gray.200', 'gray.700')}>
               <MenuItem>Perfil</MenuItem>
               <MenuDivider />
-              <MenuItem onClick={() => doSignOut()}>Cerrar sesión</MenuItem>
+              <MenuItem onClick={handleClick}>Cerrar sesión</MenuItem>
             </MenuList>
           </Menu>
         </Flex>

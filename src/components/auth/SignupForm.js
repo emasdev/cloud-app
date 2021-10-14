@@ -114,7 +114,7 @@ export default function SignupForm() {
             <InputGroup size="md">
               <Input
                 placeholder="Contraseña"
-                type="password"
+                type={show ? "text" : "password"}
                 {...register("password", {
                   required: {
                     value: true,
@@ -130,7 +130,10 @@ export default function SignupForm() {
                 <Button
                   h="1.75rem"
                   size="sm"
-                  onClick={() => setShow(!show)}
+                  onClick={() => {
+                    setShow(!show);
+                    console.log("muestra contraseña");
+                  }}
                   leftIcon={<Icon as={show ? FiEyeOff : FiEye} />}
                 ></Button>
               </InputRightElement>
@@ -147,7 +150,7 @@ export default function SignupForm() {
             <InputGroup size="md">
               <Input
                 placeholder="Comfirmar contraseña"
-                type="password"
+                type={show2 ? "text" : "password"}
                 {...register("cpassword", {
                   required: {
                     value: true,
