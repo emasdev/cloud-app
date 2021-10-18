@@ -1,5 +1,6 @@
 import React from 'react';
 import { useForm } from 'react-hook-form';
+import { Link as RouterLink, useHistory } from 'react-router-dom';
 import FirebaseAuthService from '../FirebaseAuthService';
 import {
   FormErrorMessage,
@@ -9,9 +10,13 @@ import {
   Button,
   Box,
   Text,
+  Link,
+  VStack,
+  Divider,
 } from '@chakra-ui/react';
 
 function LoginForm({ user }) {
+  const history = useHistory();
   const {
     handleSubmit,
     register,
@@ -37,8 +42,10 @@ function LoginForm({ user }) {
     <>
       {user ? (
         <Box>
-          <Text>Bienvenido {user.email}</Text>
-          <Button onClick={handleLogout}>Cerrar sesión</Button>
+          <VStack spacing={8}>
+            <Text>Bienvenido {user.email}</Text>
+            <Button onClick={handleLogout}>Cerrar sesión</Button>
+          </VStack>
         </Box>
       ) : (
         <form onSubmit={handleSubmit(onSubmit)}>
@@ -67,14 +74,19 @@ function LoginForm({ user }) {
               {errors.name && errors.name.message}
             </FormErrorMessage>
           </FormControl>
-          <Button
-            mt={4}
-            colorScheme="teal"
-            isLoading={isSubmitting}
-            type="submit"
-          >
-            Submit
-          </Button>
+          <VStack>
+            <Button
+              mt={4}
+              colorScheme="teal"
+              isLoading={isSubmitting}
+              type="submit"
+            >
+              Submit
+            </Button>
+            <Link as={RouterLink} to="/registrar">
+              Registrar nueva cuenta
+            </Link>
+          </VStack>
         </form>
       )}
     </>

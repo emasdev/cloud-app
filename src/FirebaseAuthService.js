@@ -1,13 +1,12 @@
 import firebase from './FirebaseConfig';
 import {
-  getAuth,
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   signOut,
   onAuthStateChanged,
 } from 'firebase/auth';
 
-const auth = getAuth(firebase);
+const auth = firebase.auth;
 
 const doCreateUserWithEmailAndPassword = (email, password) => {
   return createUserWithEmailAndPassword(auth, email, password);
