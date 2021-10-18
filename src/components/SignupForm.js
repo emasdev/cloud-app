@@ -2,6 +2,7 @@ import React from 'react';
 import { useForm } from 'react-hook-form';
 import FirebaseAuthService from '../FirebaseAuthService';
 import FirebaseFirestoreService from '../FirebaseFirestoreService';
+import FirebaseStorageService from '../FirebaseStorageService';
 import {
   FormErrorMessage,
   FormLabel,
@@ -26,6 +27,8 @@ function SignupForm({ user }) {
   async function onSubmit(values) {
     try {
       let userId = null;
+      let imageUrl = null;
+
       // Crear Usuario
       await FirebaseAuthService.doCreateUserWithEmailAndPassword(
         values.email,
@@ -39,12 +42,23 @@ function SignupForm({ user }) {
       const docData = {
         nombre: values.nombre,
         apellidos: values.apellidos,
+        imageUrl: imageUrl,
       };
 
       await FirebaseFirestoreService.createDocument(
         'usuarios',
         userId,
         docData
+      );
+
+      //Crear imagen si hay
+      const file = values.image[0];
+      imageUrl = await FirebaseStorageService.uploadAvatarImg(
+        file,
+        `avatar/${userId}`,
+        progress => {
+          console.log(progress);
+        }
       );
 
       // Ir a dashboard
@@ -75,6 +89,11 @@ function SignupForm({ user }) {
         </Box>
       ) : (
         <form onSubmit={handleSubmit(onSubmit)}>
+          <FormControl id="image">
+            <FormLabel>Imagen de perfil</FormLabel>
+            <Input type="file" accept="image/*" {...register('image')} />
+          </FormControl>
+
           <FormControl isInvalid={errors.name} id="email">
             <FormLabel>Email</FormLabel>
             <Input

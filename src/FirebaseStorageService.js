@@ -1,4 +1,4 @@
-import firebaseConfig from './FirebaseConfig';
+import firebase from './FirebaseConfig';
 import {
   ref,
   uploadBytesResumable,
@@ -9,6 +9,7 @@ import {
 const storage = firebase.storage;
 
 const uploadAvatarImg = (file, fullFilePath, progressCallback) => {
+  console.log(fullFilePath);
   const uploadRef = ref(storage, fullFilePath);
   const uploadTask = uploadBytesResumable(uploadRef, file);
 
@@ -30,15 +31,22 @@ const uploadAvatarImg = (file, fullFilePath, progressCallback) => {
     const downloadUrl = await getDownloadURL(uploadTask.snapshot.ref);
     return downloadUrl;
   });
-
-  const deleteFile = fileDownloadUrl => {
-    const decodedUrl = decodeURIComponent(fileDownloadUrl);
-    const startIndex = decodedUrl.indexOf('/o/') + 3;
-    const endIndex = decodedUrl.indexOf('?');
-    const filePath = decodedUrl.substring(startIndex, endIndex);
-
-    const fileRef = ref(storage, filePath);
-
-    return deleteObject(fileRef);
-  };
 };
+
+const deleteFile = fileDownloadUrl => {
+  const decodedUrl = decodeURIComponent(fileDownloadUrl);
+  const startIndex = decodedUrl.indexOf('/o/') + 3;
+  const endIndex = decodedUrl.indexOf('?');
+  const filePath = decodedUrl.substring(startIndex, endIndex);
+
+  const fileRef = ref(storage, filePath);
+
+  return deleteObject(fileRef);
+};
+
+const FirebaseStorageService = {
+  uploadAvatarImg,
+  deleteFile,
+};
+
+export default FirebaseStorageService;
