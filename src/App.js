@@ -33,15 +33,22 @@ function App() {
   useEffect(() => {
     console.log('use effect app : user');
     FirebaseAuthService.subscribeToAuthChanges(setUser);
-    if (user) {
+    if (!user) {
+      setUserData(null);
+    }
+  }, [user]);
+
+  useEffect(() => {
+    console.log('use effect app');
+    if (user && !userData) {
       FirebaseFirestoreService.readDocument('usuarios', user.uid).then(
         userData => {
           setUserData(userData);
+          console.log(userData);
         }
       );
     }
-  }, []);
-
+  })
   return (
     <ChakraProvider theme={theme}>
       <Box textAlign="center" fontSize="xl">

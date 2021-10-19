@@ -38,6 +38,16 @@ function SignupForm({ user }) {
         userId = user.uid;
       });
 
+      //Crear imagen si hay
+      const file = values.image[0];
+      imageUrl = await FirebaseStorageService.uploadAvatarImg(
+        file,
+        `avatar/${userId}`,
+        progress => {
+          console.log(progress);
+        }
+      );
+
       // Crear Usuario en Docs
       const docData = {
         nombre: values.nombre,
@@ -49,16 +59,6 @@ function SignupForm({ user }) {
         'usuarios',
         userId,
         docData
-      );
-
-      //Crear imagen si hay
-      const file = values.image[0];
-      imageUrl = await FirebaseStorageService.uploadAvatarImg(
-        file,
-        `avatar/${userId}`,
-        progress => {
-          console.log(progress);
-        }
       );
 
       // Ir a dashboard
