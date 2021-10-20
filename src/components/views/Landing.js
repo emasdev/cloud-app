@@ -1,15 +1,5 @@
 import React from "react";
-import {
-  Grid,
-  Box,
-  Image,
-  Center,
-  Text,
-  VStack,
-  Stack,
-  Flex,
-  Button,
-} from "@chakra-ui/react";
+import { Grid, Box, Image, Center, Text, VStack, Stack, Flex, Button } from "@chakra-ui/react";
 import { useHistory } from "react-router-dom";
 import Navbar from "../Navbar";
 
@@ -24,9 +14,14 @@ const Landing = () => {
   const history = useHistory();
   if (!user && !userData) {
     return (
-      <Grid templateColumns={{
-        base: "1fr", md: "1fr 1fr", xl: "2fr 1fr"
-      }} minH="100vh" >
+      <Grid
+        templateColumns={{
+          base: "1fr",
+          md: "1fr 1fr",
+          xl: "2fr 1fr",
+        }}
+        minH="100vh"
+      >
         <Box w="100%">
           <Center h="100%">
             <VStack spacing={4}>
@@ -55,46 +50,13 @@ const Landing = () => {
             <Box mb={12}>
               <LoginForm />
             </Box>
-
           </Center>
         </Box>
-      </Grid >
+      </Grid>
     );
   } else {
-    return (
-      <SidebarHeader />
-      // <Grid templateColumns={{
-      //   base: "1fr", md: "1fr 2fr", xl: "1fr 3fr"
-      // }} minH="100vh">
-      //   <Box w="100%"
-      //     bg="idm.800"
-      //   >
-      //     <VStack spacing={4} mt={8}>
-      //       <Box>
-      //         <Image w="70%" m="auto" src={heroImg} />
-      //       </Box>
-      //     </VStack>
-
-      //   </Box>
-      //   <Stack spacing={8} p={4}>
-      //     <Navbar />
-      //     {/* <Flex justifyContent="flex-end">
-      //       <Button
-      //         onClick={async e => {
-      //           await doSignOut()
-      //           history.push("/")
-      //         }}>Cerrar sesión</Button>
-      //     </Flex>
-      //     <Box>
-      //       {userData && Object.entries(userData).map(value => {
-      //         return (<Text key={value}>{value} </Text>)
-      //       })}
-      //     </Box> */}
-      //   </Stack>
-      // </Grid>
-    )
+    return <SidebarHeader />;
   }
-
 };
 
 export default Landing;
