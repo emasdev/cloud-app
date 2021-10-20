@@ -6,7 +6,7 @@ import Navbar from "../Navbar";
 import LoginForm from "../auth/LoginForm";
 import { useAuth } from "../../hooks/useAuth";
 
-import heroImg from "../../img/hero.png";
+import logoImg from "../../img/hero.png";
 import SidebarHeader from "../SidebarHeader";
 
 const Landing = () => {
@@ -26,7 +26,7 @@ const Landing = () => {
           <Center h="100%">
             <VStack spacing={4}>
               <Box>
-                <Image w="70%" m="auto" src={heroImg} />
+                <Image w="70%" m="auto" src={logoImg} />
               </Box>
               <Box>
                 <Text color="blue.300" mt={4}>
@@ -55,7 +55,42 @@ const Landing = () => {
       </Grid>
     );
   } else {
+<<<<<<< HEAD
     return <SidebarHeader />;
+=======
+    return (
+      <SidebarHeader />
+      // <Grid templateColumns={{
+      //   base: "1fr", md: "1fr 2fr", xl: "1fr 3fr"
+      // }} minH="100vh">
+      //   <Box w="100%"
+      //     bg="idm.800"
+      //   >
+      //     <VStack spacing={4} mt={8}>
+      //       <Box>
+      //         <Image w="70%" m="auto" src={heroImg} />
+      //       </Box>
+      //     </VStack>
+
+      //   </Box>
+      //   <Stack spacing={8} p={4}>
+      //     <Navbar />
+      //     {/* <Flex justifyContent="flex-end">
+      //       <Button
+      //         onClick={async e => {
+      //           await doSignOut()
+      //           history.push("/")
+      //         }}>Cerrar sesión</Button>
+      //     </Flex>
+      //     <Box>
+      //       {userData && Object.entries(userData).map(value => {
+      //         return (<Text key={value}>{value} </Text>)
+      //       })}
+      //     </Box> */}
+      //   </Stack>
+      // </Grid>
+    );
+>>>>>>> 5743cdf7a6cf7da68a8ba833d3f0f0f9bead643b
   }
 };
 
