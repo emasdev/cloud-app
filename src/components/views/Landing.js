@@ -1,22 +1,12 @@
 import React from "react";
-import {
-  Grid,
-  Box,
-  Image,
-  Center,
-  Text,
-  VStack,
-  Stack,
-  Flex,
-  Button,
-} from "@chakra-ui/react";
+import { Grid, Box, Image, Center, Text, VStack, Stack, Flex, Button } from "@chakra-ui/react";
 import { useHistory } from "react-router-dom";
 import Navbar from "../Navbar";
 
 import LoginForm from "../auth/LoginForm";
 import { useAuth } from "../../hooks/useAuth";
 
-import heroImg from "../../img/hero.png";
+import logoImg from "../../img/hero.png";
 import SidebarHeader from "../SidebarHeader";
 
 const Landing = () => {
@@ -24,14 +14,19 @@ const Landing = () => {
   const history = useHistory();
   if (!user && !userData) {
     return (
-      <Grid templateColumns={{
-        base: "1fr", md: "1fr 1fr", xl: "2fr 1fr"
-      }} minH="100vh" >
+      <Grid
+        templateColumns={{
+          base: "1fr",
+          md: "1fr 1fr",
+          xl: "2fr 1fr",
+        }}
+        minH="100vh"
+      >
         <Box w="100%">
           <Center h="100%">
             <VStack spacing={4}>
               <Box>
-                <Image w="70%" m="auto" src={heroImg} />
+                <Image w="70%" m="auto" src={logoImg} />
               </Box>
               <Box>
                 <Text color="blue.300" mt={4}>
@@ -55,10 +50,9 @@ const Landing = () => {
             <Box mb={12}>
               <LoginForm />
             </Box>
-
           </Center>
         </Box>
-      </Grid >
+      </Grid>
     );
   } else {
     return (
@@ -92,9 +86,8 @@ const Landing = () => {
       //     </Box> */}
       //   </Stack>
       // </Grid>
-    )
+    );
   }
-
 };
 
 export default Landing;
