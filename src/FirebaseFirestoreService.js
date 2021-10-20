@@ -8,7 +8,7 @@ const createDocument = (collection, id, docData) => {
 };
 
 const readDocument = async (collection, id) => {
-  const docRef = doc(db, 'usuarios', id);
+  const docRef = doc(db, collection, id);
   const docSnap = await getDoc(docRef);
 
   if (docSnap.exists()) {

@@ -70,7 +70,12 @@ function SignupForm() {
       // Crear Usuario en Docs
       const docData = {
         nombre: values.nombre,
-        apellidos: values.apellidos,
+        apellido_paterno: values.apellido_paterno,
+        apellido_materno: values.apellido_materno,
+        tel: values.tel,
+        fecha_nacimiento: values.fecha_nacimiento,
+        especialidad: values.especialidad,
+        dir_consultorio: values.dir_consultorio,
         imageUrl: imageUrl,
       };
 
@@ -185,7 +190,7 @@ function SignupForm() {
                   },
                   validate: value =>
                     value === password.current ||
-                    'Los passwords deben ser   iguales',
+                    'Los passwords deben ser iguales',
                 })}
               />
               <InputRightElement width="4.5rem">
