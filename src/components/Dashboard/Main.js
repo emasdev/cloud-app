@@ -1,14 +1,14 @@
 import React from 'react';
+import { Center } from '@chakra-ui/react';
 
-export default function Dashboard({ userData }) {
-  console.log(userData);
+export default function Main({ userData }) {
   return (
-    <div>
+    <Center>
       <ul>
         <p>Nombres: {userData.nombre}</p>
         <p>Apellidos: {userData.apellidos}</p>
         <img src={userData.imageUrl}></img>
       </ul>
-    </div>
+    </Center>
   );
 }

@@ -9,7 +9,7 @@ import {
   Grid,
   Heading,
 } from '@chakra-ui/react';
-import theme from "./theme"
+import theme from './theme';
 import { ColorModeSwitcher } from './ColorModeSwitcher';
 import { Logo } from './Logo';
 
@@ -24,7 +24,8 @@ import {
   Route,
   Link as RouterLink,
 } from 'react-router-dom';
-import Dashboard from './components/Dashboard';
+import Dashboard from './components/Dashboard/Main';
+import Landing from './views/Landing';
 
 function App() {
   const [user, setUser] = useState(null);
@@ -54,12 +55,12 @@ function App() {
             renders the first one that matches the current URL. */}
             <Switch>
               <Route exact path="/">
-                {/* Landing Page */}
-                <VStack spacing={8}>
+                <Landing user={user} userData={userData} />
+                {/* <VStack spacing={8}>
                   <Heading>IDM</Heading>
                   <LoginForm user={user}></LoginForm>
                   {userData && <Dashboard userData={userData} />}
-                </VStack>
+                </VStack> */}
               </Route>
               <Route path="/registrar">
                 {/* Registrar Page */}
