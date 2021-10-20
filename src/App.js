@@ -1,14 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import {
-  ChakraProvider,
-  Box,
-  Text,
-  Link,
-  VStack,
-  Code,
-  Grid,
-  Heading,
-} from '@chakra-ui/react';
+import { ChakraProvider, Box, Grid } from '@chakra-ui/react';
 import theme from './theme';
 import { ColorModeSwitcher } from './ColorModeSwitcher';
 import { Logo } from './Logo';
@@ -24,8 +15,8 @@ import {
   Route,
   Link as RouterLink,
 } from 'react-router-dom';
-import Dashboard from './components/Dashboard/Main';
 import Landing from './views/Landing';
+import Signup from './views/Signup';
 
 function App() {
   const [user, setUser] = useState(null);
@@ -48,7 +39,7 @@ function App() {
   return (
     <ChakraProvider theme={theme}>
       <Box textAlign="center" fontSize="xl">
-        <Grid minH="100vh" p={3}>
+        <Grid minH="100vh">
           <ColorModeSwitcher justifySelf="flex-end" />
           <Router>
             {/* A <Switch> looks through its children <Route>s and
@@ -63,11 +54,11 @@ function App() {
                 </VStack> */}
               </Route>
               <Route path="/registrar">
-                {/* Registrar Page */}
-                <VStack spacing={8}>
+                <Signup />
+                {/* <VStack spacing={8}>
                   <Heading>Registrar nueva cuenta</Heading>
                   <SignupForm user={user}></SignupForm>
-                </VStack>
+                </VStack> */}
               </Route>
             </Switch>
           </Router>
