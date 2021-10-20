@@ -7,9 +7,9 @@ import {
   VStack,
   Code,
   Grid,
-  theme,
   Heading,
 } from '@chakra-ui/react';
+import theme from "./theme"
 import { ColorModeSwitcher } from './ColorModeSwitcher';
 import { Logo } from './Logo';
 
@@ -30,25 +30,20 @@ function App() {
   const [user, setUser] = useState(null);
   const [userData, setUserData] = useState(null);
 
+  FirebaseAuthService.subscribeToAuthChanges(setUser);
+
   useEffect(() => {
-    console.log('use effect app : user');
-    FirebaseAuthService.subscribeToAuthChanges(setUser);
-    if (!user) {
+    if (user) {
+      FirebaseFirestoreService.readDocument('usuarios', user.uid).then(
+        userData => {
+          setUserData(userData);
+        }
+      );
+    } else {
       setUserData(null);
     }
   }, [user]);
 
-  useEffect(() => {
-    console.log('use effect app');
-    if (user && !userData) {
-      FirebaseFirestoreService.readDocument('usuarios', user.uid).then(
-        userData => {
-          setUserData(userData);
-          console.log(userData);
-        }
-      );
-    }
-  })
   return (
     <ChakraProvider theme={theme}>
       <Box textAlign="center" fontSize="xl">
