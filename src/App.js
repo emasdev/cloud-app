@@ -17,53 +17,58 @@ import {
 } from 'react-router-dom';
 import Landing from './views/Landing';
 import Signup from './views/Signup';
+import Loading from './views/Loading';
 
 function App() {
   const [user, setUser] = useState(null);
   const [userData, setUserData] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [isRegistering, setIsRegistering] = useState(false);
 
-  FirebaseAuthService.subscribeToAuthChanges(setUser);
+  function handleRegisterUser(isDone) {
+    setIsRegistering(isDone);
+  }
 
   useEffect(() => {
-    if (user) {
-      FirebaseFirestoreService.readDocument('usuarios', user.uid).then(
-        userData => {
-          setUserData(userData);
+    FirebaseAuthService.subscribeToAuthChanges(user => {
+      if (!user) {
+        setUser(null);
+        setUserData(null);
+      } else {
+        if (!isRegistering) {
+          FirebaseFirestoreService.readDocument('usuarios', user.uid).then(
+            data => {
+              setUser(user);
+              setUserData(data);
+              setIsLoading(false);
+            }
+          );
         }
-      );
-    } else {
-      setUserData(null);
-    }
-  }, [user]);
+      }
+    });
+  }, []);
 
   return (
     <ChakraProvider theme={theme}>
-      <Box textAlign="center" fontSize="xl">
-        <Grid minH="100vh">
-          <ColorModeSwitcher justifySelf="flex-end" />
-          <Router>
-            {/* A <Switch> looks through its children <Route>s and
-            renders the first one that matches the current URL. */}
-            <Switch>
-              <Route exact path="/">
-                <Landing user={user} userData={userData} />
-                {/* <VStack spacing={8}>
-                  <Heading>IDM</Heading>
-                  <LoginForm user={user}></LoginForm>
-                  {userData && <Dashboard userData={userData} />}
-                </VStack> */}
-              </Route>
-              <Route path="/registrar">
-                <Signup />
-                {/* <VStack spacing={8}>
-                  <Heading>Registrar nueva cuenta</Heading>
-                  <SignupForm user={user}></SignupForm>
-                </VStack> */}
-              </Route>
-            </Switch>
-          </Router>
-        </Grid>
-      </Box>
+      {isLoading ? (
+        <Loading />
+      ) : (
+        <Box textAlign="center" fontSize="xl">
+          <Grid minH="100vh">
+            {/* <ColorModeSwitcher justifySelf="flex-end" /> */}
+            <Router>
+              <Switch>
+                <Route exact path="/">
+                  <Landing user={user} userData={userData} />
+                </Route>
+                <Route path="/registrar">
+                  <Signup onRegisterUserChange={handleRegisterUser} />
+                </Route>
+              </Switch>
+            </Router>
+          </Grid>
+        </Box>
+      )}
     </ChakraProvider>
   );
 }

@@ -14,7 +14,7 @@ const readDocument = async (collection, id) => {
   if (docSnap.exists()) {
     return docSnap.data();
   } else {
-    alert('no user data');
+    console.log('no user data');
   }
 };
 

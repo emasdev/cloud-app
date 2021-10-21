@@ -28,7 +28,7 @@ import {
 import { useHistory, Link as LinkTo } from 'react-router-dom';
 import { FiEye, FiEyeOff } from 'react-icons/fi';
 
-function SignupForm({ setSignin }) {
+function SignupForm(props) {
   const history = useHistory();
   const [show, setShow] = useState(false);
   const [show2, setShow2] = useState(false);
@@ -47,7 +47,7 @@ function SignupForm({ setSignin }) {
     try {
       let userId = null;
       let imageUrl = null;
-      setSignin(true);
+      props.onRegisterUserChange(true);
 
       // Crear Usuario
       const userCredential =
@@ -71,12 +71,12 @@ function SignupForm({ setSignin }) {
       // Crear Usuario en Docs
       const docData = {
         nombre: values.nombre,
-        apellido_paterno: values.apellido_paterno,
-        apellido_materno: values.apellido_materno,
-        tel: values.tel,
-        fecha_nacimiento: values.fecha_nacimiento,
-        especialidad: values.especialidad,
-        dir_consultorio: values.dir_consultorio,
+        // apellido_paterno: values.apellido_paterno,
+        // apellido_materno: values.apellido_materno,
+        // tel: values.tel,
+        // fecha_nacimiento: values.fecha_nacimiento,
+        // especialidad: values.especialidad,
+        // dir_consultorio: values.dir_consultorio,
         imageUrl: imageUrl,
       };
 
@@ -86,7 +86,9 @@ function SignupForm({ setSignin }) {
         docData
       );
 
-      setSignin(false);
+      console.log('usuario registrado');
+
+      props.onRegisterUserChange(false);
 
       // Ir a dashboard
       history.push('/');
@@ -236,7 +238,7 @@ function SignupForm({ setSignin }) {
               </Alert>
             )}
           </FormControl>
-          <FormControl id="apellido_paterno">
+          {/* <FormControl id="apellido_paterno">
             <FormLabel>Apellido paterno</FormLabel>
             <Input
               placeholder="Apellido paterno"
@@ -374,7 +376,7 @@ function SignupForm({ setSignin }) {
               Dirección en la que se le entregarian los estudios físicos en caso
               que los requiera.
             </FormHelperText>
-          </FormControl>
+          </FormControl> */}
         </Grid>
         <Stack>
           <Button
