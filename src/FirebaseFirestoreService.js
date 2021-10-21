@@ -18,12 +18,10 @@ const readDocument = async (collection, id) => {
   }
 };
 
-// const updateDocument = (collection, id, document) => {
-//   return updateDoc(
-//     doc(firestoreCollection(db, collection), id),
-//     document
-//   );
-// };
+const updateDocument = (collection, id, data) => {
+  const docRef = doc(db, collection, id);
+  return updateDoc(docRef, data);
+};
 // const deleteDocument = (collection, id) => {
 //   return deleteDoc(doc(firestoreCollection(db, collection), id));
 // };
@@ -31,7 +29,7 @@ const readDocument = async (collection, id) => {
 const FirebaseFirestoreService = {
   createDocument,
   readDocument,
-  // updateDocument,
+  updateDocument,
   // deleteDocument,
 };
 

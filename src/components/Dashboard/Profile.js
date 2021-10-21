@@ -1,9 +1,12 @@
 import React from 'react'
+import { Heading } from '@chakra-ui/react'
 
-export default function Profile() {
+import UpdateProfileForm from '../UpdateProfileForm'
+
+export default function Profile({ user, userData, handleUserData }) {
   return (
-    <div>
-      Editar perfil
-    </div>
+    <>
+      <UpdateProfileForm user={user} userData={userData} handleUserData={handleUserData} />
+    </>
   )
 }

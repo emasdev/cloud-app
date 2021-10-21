@@ -24,6 +24,10 @@ function App() {
   const [userData, setUserData] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
 
+  function handleUserData(data) {
+    setUserData(data);
+  }
+
 
   useEffect(() => {
     FirebaseAuthService.subscribeToAuthChanges(user => {
@@ -59,7 +63,7 @@ function App() {
             <Router>
               <Switch>
                 <Route exact path="/">
-                  <Landing user={user} userData={userData} />
+                  <Landing user={user} userData={userData} handleUserData={handleUserData} />
                 </Route>
                 <Route path="/registrar">
                   <Signup />

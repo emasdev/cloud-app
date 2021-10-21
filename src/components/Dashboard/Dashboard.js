@@ -44,7 +44,7 @@ const LinkItems = [
   { name: 'Herramientas', icon: FiSettings, section: "herramientas" },
 ];
 
-export default function Dashboard({ children, userData }) {
+export default function Dashboard({ children, user, userData, handleUserData }) {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [section, setSection] = useState('main');
 
@@ -76,7 +76,7 @@ export default function Dashboard({ children, userData }) {
       <Box ml={{ base: 0, md: 60 }} p="4">
         {children}
         {section == 'main' && <Main userData={userData} />}
-        {section == 'profile' && <Profile userData={userData} />}
+        {section == 'profile' && <Profile user={user} userData={userData} handleUserData={handleUserData} />}
       </Box>
     </Box>
   );
