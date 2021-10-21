@@ -189,10 +189,7 @@ const MobileNav = ({ userData, onOpen, ...rest }) => {
                   spacing="1px"
                   ml="2"
                 >
-                  <Text fontSize="sm">
-                    {userData.nombre} {userData.apellido_paterno}{' '}
-                    {userData.apellido_materno}
-                  </Text>
+                  <Text fontSize="sm">{userData.nombre}</Text>
                 </VStack>
                 <Box display={{ base: 'none', md: 'flex' }}>
                   <FiChevronDown />
