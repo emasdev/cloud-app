@@ -28,7 +28,7 @@ import {
 import { useHistory, Link as LinkTo } from 'react-router-dom';
 import { FiEye, FiEyeOff } from 'react-icons/fi';
 
-function SignupForm(props) {
+function SignupForm() {
   const history = useHistory();
   const [show, setShow] = useState(false);
   const [show2, setShow2] = useState(false);
@@ -47,7 +47,6 @@ function SignupForm(props) {
     try {
       let userId = null;
       let imageUrl = null;
-      props.onRegisterUserChange(true);
 
       // Crear Usuario
       const userCredential =
@@ -87,8 +86,6 @@ function SignupForm(props) {
       );
 
       console.log('usuario registrado');
-
-      props.onRegisterUserChange(false);
 
       // Ir a dashboard
       history.push('/');

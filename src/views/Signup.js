@@ -4,7 +4,7 @@ import { Grid, Box, Image, Center, VStack, Stack } from '@chakra-ui/react';
 import SignupForm from '../components/SignupFormTest';
 import logoImg from '../img/logo.png';
 
-export default function Signup(props) {
+export default function Signup() {
   return (
     <Grid
       templateColumns={{
@@ -24,7 +24,7 @@ export default function Signup(props) {
         </Center>
       </Box>
       <Stack spacing={8} p={8}>
-        <SignupForm onRegisterUserChange={props.onRegisterUserChange} />
+        <SignupForm />
       </Stack>
     </Grid>
   );

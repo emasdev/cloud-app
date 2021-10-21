@@ -23,29 +23,29 @@ function App() {
   const [user, setUser] = useState(null);
   const [userData, setUserData] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
-  const [isRegistering, setIsRegistering] = useState(false);
 
-  function handleRegisterUser(isDone) {
-    setIsRegistering(isDone);
-  }
 
   useEffect(() => {
     FirebaseAuthService.subscribeToAuthChanges(user => {
+      console.log('authOnChange triggered');
       if (!user) {
         setUser(null);
         setUserData(null);
+        setIsLoading(false);
       } else {
-        if (!isRegistering) {
-          FirebaseFirestoreService.readDocument('usuarios', user.uid).then(
-            data => {
-              setUser(user);
-              setUserData(data);
-              setIsLoading(false);
-            }
-          );
-        }
+        FirebaseFirestoreService.readDocument('usuarios', user.uid).then(
+          data => {
+            setUser(user);
+            setUserData(data);
+            setIsLoading(false);
+          }
+        );
       }
     });
+    return (() => {
+      setUser(null);
+      setUserData(null);
+    })
   }, []);
 
   return (
@@ -62,7 +62,7 @@ function App() {
                   <Landing user={user} userData={userData} />
                 </Route>
                 <Route path="/registrar">
-                  <Signup onRegisterUserChange={handleRegisterUser} />
+                  <Signup />
                 </Route>
               </Switch>
             </Router>

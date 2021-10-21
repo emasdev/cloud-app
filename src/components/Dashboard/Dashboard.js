@@ -20,6 +20,7 @@ import {
   MenuItem,
   MenuList,
   Image,
+  Button
 } from '@chakra-ui/react';
 import {
   FiHome,
@@ -34,20 +35,26 @@ import { useHistory } from 'react-router-dom';
 import logoImg from '../../img/logo.png';
 import Main from './Main';
 import FirebaseAuthService from '../../FirebaseAuthService';
+import Profile from './Profile';
 
 const LinkItems = [
-  { name: 'Dashboard', icon: FiHome },
-  { name: 'Agenda', icon: FiCalendar },
-  { name: 'Estudios', icon: FiBookOpen },
-  { name: 'Herramientas', icon: FiSettings },
+  { name: 'Dashboard', icon: FiHome, section: "main" },
+  { name: 'Agenda', icon: FiCalendar, section: "agenda" },
+  { name: 'Estudios', icon: FiBookOpen, section: "estudios" },
+  { name: 'Herramientas', icon: FiSettings, section: "herramientas" },
 ];
 
 export default function Dashboard({ children, userData }) {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [section, setSection] = useState('main');
+
+  function handleSection(section) {
+    setSection(section);
+  }
+
   return (
     <Box minH="100vh" bg={useColorModeValue('gray.100', 'gray.900')}>
-      <SidebarContent
+      <SidebarContent onSelectSection={handleSection}
         onClose={() => onClose}
         display={{ base: 'none', md: 'block' }}
       />
@@ -65,16 +72,22 @@ export default function Dashboard({ children, userData }) {
         </DrawerContent>
       </Drawer>
       {/* mobilenav */}
-      <MobileNav onOpen={onOpen} userData={userData} />
+      <MobileNav onOpen={onOpen} userData={userData} onSelectSection={handleSection} />
       <Box ml={{ base: 0, md: 60 }} p="4">
         {children}
         {section == 'main' && <Main userData={userData} />}
+        {section == 'profile' && <Profile userData={userData} />}
       </Box>
     </Box>
   );
 }
 
-const SidebarContent = ({ onClose, ...rest }) => {
+const SidebarContent = ({ onClose, onSelectSection, ...rest }) => {
+
+  const handleSelectSection = (section) => {
+    onSelectSection(section);
+  }
+
   return (
     <Box
       transition="3s ease"
@@ -91,23 +104,25 @@ const SidebarContent = ({ onClose, ...rest }) => {
         <Image m="auto" src={logoImg} />
         <CloseButton display={{ base: 'flex', md: 'none' }} onClick={onClose} />
       </Flex>
-      {LinkItems.map(link => (
-        <NavItem key={link.name} icon={link.icon}>
-          {link.name}
-        </NavItem>
-      ))}
+      <VStack>
+        {LinkItems.map(link => (
+          <NavItem key={link.name} icon={link.icon} onClick={() => handleSelectSection(link.section)}>
+            {link.name}
+          </NavItem>
+        ))}
+      </VStack>
     </Box>
   );
 };
 
 const NavItem = ({ icon, children, ...rest }) => {
   return (
-    <Link href="#" style={{ textDecoration: 'none' }}>
-      <Flex
+    <Button w="100%" variant="link" style={{ textDecoration: 'none' }}>
+      <Flex w="100%"
         align="center"
-        p="4"
-        mx="4"
-        borderRadius="lg"
+        py="4"
+        pl="8"
+        borderRadius="none"
         role="group"
         cursor="pointer"
         _hover={{
@@ -128,12 +143,15 @@ const NavItem = ({ icon, children, ...rest }) => {
         )}
         {children}
       </Flex>
-    </Link>
+    </Button>
   );
 };
 
-const MobileNav = ({ userData, onOpen, ...rest }) => {
-  const history = useHistory();
+const MobileNav = ({ userData, onOpen, onSelectSection, ...rest }) => {
+
+  const handleSelectSection = (section) => {
+    onSelectSection(section)
+  }
 
   const handleSignOut = () => {
     FirebaseAuthService.doSignOut();
@@ -200,7 +218,7 @@ const MobileNav = ({ userData, onOpen, ...rest }) => {
               bg={useColorModeValue('white', 'gray.900')}
               borderColor={useColorModeValue('gray.200', 'gray.700')}
             >
-              <MenuItem>Perfil</MenuItem>
+              <MenuItem onClick={() => handleSelectSection('profile')}>Perfil</MenuItem>
               <MenuDivider />
               <MenuItem onClick={handleSignOut}>Cerrar sesión</MenuItem>
             </MenuList>
