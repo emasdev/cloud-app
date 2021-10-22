@@ -1,7 +1,6 @@
 import React from 'react';
 import { Grid, Box, Image, Center, VStack, Stack } from '@chakra-ui/react';
-// import SignupForm from '../components/SignupForm';
-import SignupForm from '../components/SignupFormTest';
+import SignupForm from '../components/SignupForm';
 import logoImg from '../img/logo.png';
 
 export default function Signup() {

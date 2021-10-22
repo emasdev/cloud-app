@@ -33,6 +33,7 @@ function LoginForm() {
   const {
     handleSubmit,
     register,
+    setError,
     formState: { errors, isSubmitting },
   } = useForm();
 
@@ -43,7 +44,15 @@ function LoginForm() {
         values.password
       );
     } catch (error) {
-      alert(error.message);
+
+      if (error.message === "Firebase: Error (auth/user-not-found).") {
+        setError("firebase", {
+          type: "manual",
+          message: "Usuario inexistente.",
+        });
+      } else {
+        alert(error.message);
+      }
     }
   }
 

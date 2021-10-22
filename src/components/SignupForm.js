@@ -28,7 +28,7 @@ import {
 import { useHistory, Link as LinkTo } from 'react-router-dom';
 import { FiEye, FiEyeOff } from 'react-icons/fi';
 
-function SignupForm({ setSignin }) {
+function SignupForm() {
   const history = useHistory();
   const [show, setShow] = useState(false);
   const [show2, setShow2] = useState(false);
@@ -47,7 +47,6 @@ function SignupForm({ setSignin }) {
     try {
       let userId = null;
       let imageUrl = null;
-      setSignin(true);
 
       // Crear Usuario
       const userCredential =
@@ -86,18 +85,7 @@ function SignupForm({ setSignin }) {
         docData
       );
 
-      setSignin(false);
-
       // Ir a dashboard
-      history.push('/');
-    } catch (error) {
-      alert(error.message);
-    }
-  }
-
-  async function handleLogout() {
-    try {
-      await FirebaseAuthService.doSignOut();
       history.push('/');
     } catch (error) {
       alert(error.message);
