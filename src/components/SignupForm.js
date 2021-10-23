@@ -24,9 +24,13 @@ import {
   AlertIcon,
   AlertDescription,
   Icon,
+  Flex,
+  Center,
+  Avatar
 } from '@chakra-ui/react';
 import { useHistory, Link as LinkTo } from 'react-router-dom';
 import { FiEye, FiEyeOff } from 'react-icons/fi';
+import { v4 as uuidv4 } from 'uuid';
 
 function SignupForm() {
   const history = useHistory();
@@ -40,8 +44,32 @@ function SignupForm() {
     watch,
   } = useForm();
 
+  const handleFileChanged = async (event) => {
+    const files = event.target.files;
+    const file = files[0];
+
+    if (!file) {
+      alert("Error al subir el archivo.");
+      return;
+    }
+
+    try {
+      const downloadUrl = await FirebaseStorageService.uploadAvatarImg(
+        file,
+        `temp/${uuidv4()}`,
+        progress => {
+          console.log(progress);
+        }
+      )
+    } catch (error) {
+      alert(error.message);
+      throw error;
+    }
+  }
+
   const password = useRef({});
   password.current = watch('password', '');
+  const avatarImg = useRef(null);
 
   async function onSubmit(values) {
     try {
@@ -89,6 +117,7 @@ function SignupForm() {
       history.push('/');
     } catch (error) {
       alert(error.message);
+      throw error;
     }
   }
 
@@ -107,10 +136,20 @@ function SignupForm() {
         <Heading as="h3" size="md">
           Datos de la cuenta
         </Heading>
-        <FormControl id="image">
-          <FormLabel>Imagen de perfil</FormLabel>
-          <Input type="file" accept="image/*" {...register('image')} />
-        </FormControl>
+        <Grid templateColumns={{ base: '1fr', lg: '1fr 1fr' }} gap={4} mt={4}>
+          <FormControl id="image">
+            <FormLabel>Imagen de perfil</FormLabel>
+            <Center mb={2}><Avatar size="xl" ref={avatarImg} /></Center>
+            <Input
+              type="file"
+              accept="image/*"
+              onChange={(e) => handleFileChanged(e)}
+              {...register('image')} />
+          </FormControl>
+
+
+        </Grid>
+
         <Grid templateColumns={{ base: '1fr', lg: '1fr 1fr' }} gap={4} mt={4}>
           <FormControl id="email">
             <FormLabel>Correo electrónico</FormLabel>
