@@ -75,9 +75,8 @@ export default function Dashboard({ children, user, userData, handleUserData }) 
       <MobileNav onOpen={onOpen} userData={userData} onSelectSection={handleSection} />
       <Box ml={{ base: 0, md: 60 }} p="4">
         {children}
-        Dashboard
-        {/* {section == 'main' && <Main userData={userData} />}
-        {section == 'profile' && <Profile user={user} userData={userData} handleUserData={handleUserData} />} */}
+        {section == 'main' && <Main userData={userData} />}
+        {section == 'profile' && <Profile user={user} userData={userData} handleUserData={handleUserData} />}
       </Box>
     </Box>
   );

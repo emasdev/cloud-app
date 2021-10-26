@@ -1,5 +1,6 @@
-import React from 'react'
+import React, { useRef } from 'react'
 import { useForm } from 'react-hook-form';
+import { v4 as uuidv4 } from 'uuid';
 import FirebaseFirestoreService from '../FirebaseFirestoreService';
 import FirebaseStorageService from '../FirebaseStorageService';
 import {
@@ -21,7 +22,9 @@ import {
   Icon,
   Select,
   Textarea,
-  FormHelperText
+  FormHelperText,
+  Center,
+  Avatar
 } from '@chakra-ui/react';
 
 export default function UpdateProfileForm({ user, userData, handleUserData }) {
@@ -33,6 +36,8 @@ export default function UpdateProfileForm({ user, userData, handleUserData }) {
     formState: { errors, isSubmitting },
   } = useForm();
 
+  const avatarImg = useRef(null);
+
   setValue('nombre', userData.nombre);
   setValue('apellido_paterno', userData.apellido_paterno);
   setValue('apellido_materno', userData.apellido_materno);
@@ -41,6 +46,29 @@ export default function UpdateProfileForm({ user, userData, handleUserData }) {
   setValue('especialidad', userData.especialidad);
   setValue('dir_consultorio', userData.dir_consultorio);
   setValue('imageUrl', userData.imageUrl);
+
+  const handleFileChanged = async (event) => {
+    const files = event.target.files;
+    const file = files[0];
+
+    if (!file) {
+      alert("Error al subir el archivo.");
+      return;
+    }
+
+    try {
+      const downloadUrl = await FirebaseStorageService.uploadAvatarImg(
+        file,
+        `temp/${uuidv4()}`,
+        progress => {
+          console.log(progress);
+        }
+      )
+    } catch (error) {
+      alert(error.message);
+      throw error;
+    }
+  }
 
   async function onSubmit(values) {
 
@@ -93,10 +121,21 @@ export default function UpdateProfileForm({ user, userData, handleUserData }) {
         <Heading as="h3" size="md">
           Datos de la cuenta
         </Heading>
-        <FormControl id="image">
+        {/* <FormControl id="image">
           <FormLabel>Imagen de perfil</FormLabel>
           <Input type="file" accept="image/*" {...register('image')} />
-        </FormControl>
+        </FormControl> */}
+        <Grid templateColumns={{ base: '1fr', lg: '1fr 1fr' }} gap={4} mt={4}>
+          <FormControl id="image">
+            <FormLabel>Imagen de perfil</FormLabel>
+            <Center mb={2}><Avatar size="xl" ref={avatarImg} /></Center>
+            <Input
+              type="file"
+              accept="image/*"
+              onChange={(e) => handleFileChanged(e)}
+              {...register('image')} />
+          </FormControl>
+        </Grid>
         <Divider my={8} />
         <Heading as="h3" size="md">
           Datos del Doctor

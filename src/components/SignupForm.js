@@ -146,8 +146,6 @@ function SignupForm() {
               onChange={(e) => handleFileChanged(e)}
               {...register('image')} />
           </FormControl>
-
-
         </Grid>
 
         <Grid templateColumns={{ base: '1fr', lg: '1fr 1fr' }} gap={4} mt={4}>
