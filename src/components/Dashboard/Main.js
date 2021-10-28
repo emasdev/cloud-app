@@ -5,9 +5,9 @@ export default function Main({ userData }) {
   return (
     <Center>
       <ul>
-        <p>Nombres: {userData.nombre}</p>
-        <p>Apellidos: {userData.apellidos}</p>
-        <img src={userData.imageUrl}></img>
+        <h2>Bienvenido al tablero de trabajo</h2>
+        <p>{userData.nombre} {userData.apellido_paterno} {userData.apellido_materno}</p>
+        {userData.imageUrl && <img src={userData.imageUrl} />}
       </ul>
     </Center>
   );

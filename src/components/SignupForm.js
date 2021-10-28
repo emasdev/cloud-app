@@ -38,6 +38,9 @@ function SignupForm() {
   const [show, setShow] = useState(false);
   const [show2, setShow2] = useState(false);
 
+  const [progress, setProgress] = useState(-1);
+  const [imageUrl, setImageUrl] = useState(null);
+
   const {
     handleSubmit,
     register,

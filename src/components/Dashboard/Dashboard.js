@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   IconButton,
   Avatar,
@@ -30,19 +30,14 @@ import {
   FiChevronDown,
   FiCalendar,
   FiBookOpen,
+  FiUsers
 } from 'react-icons/fi';
 import { useHistory } from 'react-router-dom';
 import logoImg from '../../img/logo.png';
 import Main from './Main';
 import FirebaseAuthService from '../../FirebaseAuthService';
 import Profile from './Profile';
-
-const LinkItems = [
-  { name: 'Dashboard', icon: FiHome, section: "main" },
-  { name: 'Agenda', icon: FiCalendar, section: "agenda" },
-  { name: 'Estudios', icon: FiBookOpen, section: "estudios" },
-  { name: 'Herramientas', icon: FiSettings, section: "herramientas" },
-];
+import Admin from './Admin';
 
 export default function Dashboard({ children, user, userData, handleUserData }) {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -54,7 +49,9 @@ export default function Dashboard({ children, user, userData, handleUserData }) 
 
   return (
     <Box minH="100vh" bg={useColorModeValue('gray.100', 'gray.900')}>
-      <SidebarContent onSelectSection={handleSection}
+      <SidebarContent
+        user={user}
+        onSelectSection={handleSection}
         onClose={() => onClose}
         display={{ base: 'none', md: 'block' }}
       />
@@ -77,12 +74,28 @@ export default function Dashboard({ children, user, userData, handleUserData }) 
         {children}
         {section == 'main' && <Main userData={userData} />}
         {section == 'profile' && <Profile user={user} userData={userData} handleUserData={handleUserData} />}
+        {section == 'admin' && <Admin user={user} userData={userData} handleUserData={handleUserData} />}
       </Box>
     </Box>
   );
 }
 
-const SidebarContent = ({ onClose, onSelectSection, ...rest }) => {
+const SidebarContent = ({ onClose, onSelectSection, user, ...rest }) => {
+
+  let LinkItems = [
+    { name: 'Dashboard', icon: FiHome, section: "main" },
+    { name: 'Agenda', icon: FiCalendar, section: "agenda" },
+    { name: 'Estudios', icon: FiBookOpen, section: "estudios" },
+    { name: 'Herramientas', icon: FiSettings, section: "herramientas" },
+  ];
+
+  if (user.email === "emas.dev@gmail.com" ||
+    user.email === "mauricepiolle@gmail.com") {
+
+    LinkItems.push({ name: 'Administrador', icon: FiUsers, section: "admin" });
+  }
+
+
 
   const handleSelectSection = (section) => {
     onSelectSection(section);
@@ -105,9 +118,9 @@ const SidebarContent = ({ onClose, onSelectSection, ...rest }) => {
         <CloseButton display={{ base: 'flex', md: 'none' }} onClick={onClose} />
       </Flex>
       <VStack>
-        {LinkItems.map(link => (
-          <NavItem key={link.name} icon={link.icon} onClick={() => handleSelectSection(link.section)}>
-            {link.name}
+        {LinkItems.map(item => (
+          <NavItem key={item.name} icon={item.icon} onClick={() => handleSelectSection(item.section)}>
+            {item.name}
           </NavItem>
         ))}
       </VStack>

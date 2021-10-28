@@ -9,7 +9,6 @@ import {
 const storage = firebase.storage;
 
 const uploadFile = (file, fullFilePath, progressCallback) => {
-  console.log(fullFilePath);
   const uploadRef = ref(storage, fullFilePath);
   const uploadTask = uploadBytesResumable(uploadRef, file);
 

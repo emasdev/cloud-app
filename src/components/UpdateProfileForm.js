@@ -6,20 +6,15 @@ import FirebaseStorageService from '../FirebaseStorageService';
 import {
   FormControl,
   FormLabel,
-  InputGroup,
   Input,
-  InputRightElement,
   Stack,
   Button,
   Heading,
-  Text,
   Grid,
   Divider,
-  Link,
   Alert,
   AlertIcon,
   AlertDescription,
-  Icon,
   Select,
   Textarea,
   FormHelperText,
@@ -27,18 +22,18 @@ import {
   Avatar,
   Progress,
 } from '@chakra-ui/react';
-import { update } from 'lodash';
 
 export default function UpdateProfileForm({ user, userData, handleUserData }) {
+
+  const [progress, setProgress] = useState(-1);
+  const [imageUrl, setImageUrl] = useState(userData.imageUrl);
+
   const {
     handleSubmit,
     register,
     setValue,
     formState: { errors, isSubmitting },
   } = useForm();
-
-  const [progress, setProgress] = useState(-1);
-  const [imageUrl, setImageUrl] = useState(userData.imageUrl);
 
   setValue('nombre', userData.nombre);
   setValue('apellido_paterno', userData.apellido_paterno);
@@ -66,7 +61,7 @@ export default function UpdateProfileForm({ user, userData, handleUserData }) {
         `temp/${uuidv4()}`,
         progress => {
           setProgress(progress);
-          if (progress === 100) {
+          if (progress == 100) {
             setProgress(-1);
           }
         }
@@ -81,12 +76,13 @@ export default function UpdateProfileForm({ user, userData, handleUserData }) {
 
   async function onSubmit(values) {
     try {
+      let downloadUrl = null;
       if (values.image.length > 0) {
         const file = values.image[0];
 
         //delete temp image
         await FirebaseStorageService.deleteFile(imageUrl);
-        const downloadUrl = await FirebaseStorageService.uploadFile(
+        downloadUrl = await FirebaseStorageService.uploadFile(
           file,
           `avatar/${user.uid}`,
           progress => {
@@ -105,7 +101,7 @@ export default function UpdateProfileForm({ user, userData, handleUserData }) {
         fecha_nacimiento: values.fecha_nacimiento,
         especialidad: values.especialidad,
         dir_consultorio: values.dir_consultorio,
-        imageUrl: imageUrl,
+        imageUrl: downloadUrl,
       };
 
       await FirebaseFirestoreService.updateDocument('usuarios', user.uid, data);
@@ -150,7 +146,7 @@ export default function UpdateProfileForm({ user, userData, handleUserData }) {
             <Center mb={2}>
               <Avatar size="xl" src={imageUrl} />
             </Center>
-            {progress !== -1 && <Progress value={progress} />}
+            {progress > -1 && <Progress value={progress} />}
             <Input
               type="file"
               accept="image/*"
