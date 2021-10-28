@@ -8,7 +8,7 @@ import {
 
 const storage = firebase.storage;
 
-const uploadAvatarImg = (file, fullFilePath, progressCallback) => {
+const uploadFile = (file, fullFilePath, progressCallback) => {
   console.log(fullFilePath);
   const uploadRef = ref(storage, fullFilePath);
   const uploadTask = uploadBytesResumable(uploadRef, file);
@@ -33,12 +33,6 @@ const uploadAvatarImg = (file, fullFilePath, progressCallback) => {
   });
 };
 
-const uploadFile = (file, path, fileName) = {
-  // Create a reference to 'images/mountains.jpg'
-  const mountainImagesRef = ref(storage, 'images/mountains.jpg');
-
-}
-
 const deleteFile = fileDownloadUrl => {
   const decodedUrl = decodeURIComponent(fileDownloadUrl);
   const startIndex = decodedUrl.indexOf('/o/') + 3;
@@ -51,7 +45,7 @@ const deleteFile = fileDownloadUrl => {
 };
 
 const FirebaseStorageService = {
-  uploadAvatarImg,
+  uploadFile,
   deleteFile,
 };
 

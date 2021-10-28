@@ -55,7 +55,7 @@ function SignupForm() {
 
       //Crear imagen si hay
       const file = values.image[0];
-      imageUrl = await FirebaseStorageService.uploadAvatarImg(
+      imageUrl = await FirebaseStorageService.uploadFile(
         file,
         `avatar/${userId}`,
         progress => {

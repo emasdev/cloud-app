@@ -1,4 +1,4 @@
-import React, { useRef } from 'react'
+import React, { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { v4 as uuidv4 } from 'uuid';
 import FirebaseFirestoreService from '../FirebaseFirestoreService';
@@ -24,11 +24,12 @@ import {
   Textarea,
   FormHelperText,
   Center,
-  Avatar
+  Avatar,
+  Progress,
 } from '@chakra-ui/react';
+import { update } from 'lodash';
 
 export default function UpdateProfileForm({ user, userData, handleUserData }) {
-
   const {
     handleSubmit,
     register,
@@ -36,7 +37,8 @@ export default function UpdateProfileForm({ user, userData, handleUserData }) {
     formState: { errors, isSubmitting },
   } = useForm();
 
-  const avatarImg = useRef(null);
+  const [progress, setProgress] = useState(-1);
+  const [imageUrl, setImageUrl] = useState(userData.imageUrl);
 
   setValue('nombre', userData.nombre);
   setValue('apellido_paterno', userData.apellido_paterno);
@@ -45,46 +47,54 @@ export default function UpdateProfileForm({ user, userData, handleUserData }) {
   setValue('fecha_nacimiento', userData.fecha_nacimiento);
   setValue('especialidad', userData.especialidad);
   setValue('dir_consultorio', userData.dir_consultorio);
-  setValue('imageUrl', userData.imageUrl);
 
-  const handleFileChanged = async (event) => {
+  const handleChange = async event => {
     const files = event.target.files;
     const file = files[0];
+    console.log('va va v vava');
 
     if (!file) {
-      alert("Error al subir el archivo.");
+      alert('Error al subir el archivo.');
       return;
     }
 
+    setProgress(0);
+
     try {
-      const downloadUrl = await FirebaseStorageService.uploadAvatarImg(
+      const downloadUrl = await FirebaseStorageService.uploadFile(
         file,
         `temp/${uuidv4()}`,
         progress => {
-          console.log(progress);
+          setProgress(progress);
+          if (progress === 100) {
+            setProgress(-1);
+          }
         }
-      )
+      );
+
+      setImageUrl(downloadUrl);
     } catch (error) {
       alert(error.message);
       throw error;
     }
-  }
+  };
 
   async function onSubmit(values) {
-
     try {
-      let imageUrl = userData.imageUrl;
       if (values.image.length > 0) {
         const file = values.image[0];
-        //delete old image
-        await FirebaseStorageService.deleteFile(userData.imageUrl);
-        imageUrl = await FirebaseStorageService.uploadAvatarImg(
+
+        //delete temp image
+        await FirebaseStorageService.deleteFile(imageUrl);
+        const downloadUrl = await FirebaseStorageService.uploadFile(
           file,
           `avatar/${user.uid}`,
           progress => {
             console.log(progress);
           }
         );
+
+        setImageUrl(downloadUrl);
       }
 
       let data = {
@@ -96,15 +106,24 @@ export default function UpdateProfileForm({ user, userData, handleUserData }) {
         especialidad: values.especialidad,
         dir_consultorio: values.dir_consultorio,
         imageUrl: imageUrl,
-      }
+      };
 
-      await FirebaseFirestoreService.updateDocument("usuarios", user.uid, data);
+      await FirebaseFirestoreService.updateDocument('usuarios', user.uid, data);
 
       handleUserData(data);
     } catch (error) {
       alert(error.message);
     }
   }
+
+  useEffect(() => {
+    //effect
+    return () => {
+      if (imageUrl !== userData.imageUrl) {
+        FirebaseStorageService.deleteFile(imageUrl);
+      }
+    };
+  }, []);
 
   return (
     <Stack spacing={8}>
@@ -128,12 +147,16 @@ export default function UpdateProfileForm({ user, userData, handleUserData }) {
         <Grid templateColumns={{ base: '1fr', lg: '1fr 1fr' }} gap={4} mt={4}>
           <FormControl id="image">
             <FormLabel>Imagen de perfil</FormLabel>
-            <Center mb={2}><Avatar size="xl" ref={avatarImg} /></Center>
+            <Center mb={2}>
+              <Avatar size="xl" src={imageUrl} />
+            </Center>
+            {progress !== -1 && <Progress value={progress} />}
             <Input
               type="file"
               accept="image/*"
-              onChange={(e) => handleFileChanged(e)}
-              {...register('image')} />
+              {...register('image')}
+              onChange={handleChange}
+            />
           </FormControl>
         </Grid>
         <Divider my={8} />
@@ -312,5 +335,5 @@ export default function UpdateProfileForm({ user, userData, handleUserData }) {
         </Stack>
       </form>
     </Stack>
-  )
+  );
 }

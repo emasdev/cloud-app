@@ -26,7 +26,8 @@ import {
   Icon,
   Flex,
   Center,
-  Avatar
+  Avatar,
+  Progress,
 } from '@chakra-ui/react';
 import { useHistory, Link as LinkTo } from 'react-router-dom';
 import { FiEye, FiEyeOff } from 'react-icons/fi';
@@ -44,28 +45,28 @@ function SignupForm() {
     watch,
   } = useForm();
 
-  const handleFileChanged = async (event) => {
+  const handleFileChanged = async event => {
     const files = event.target.files;
     const file = files[0];
 
     if (!file) {
-      alert("Error al subir el archivo.");
+      alert('Error al subir el archivo.');
       return;
     }
 
     try {
-      const downloadUrl = await FirebaseStorageService.uploadAvatarImg(
+      const downloadUrl = await FirebaseStorageService.uploadFile(
         file,
         `temp/${uuidv4()}`,
         progress => {
           console.log(progress);
         }
-      )
+      );
     } catch (error) {
       alert(error.message);
       throw error;
     }
-  }
+  };
 
   const password = useRef({});
   password.current = watch('password', '');
@@ -87,7 +88,7 @@ function SignupForm() {
 
       //Crear imagen si hay
       const file = values.image[0];
-      imageUrl = await FirebaseStorageService.uploadAvatarImg(
+      imageUrl = await FirebaseStorageService.uploadFile(
         file,
         `avatar/${userId}`,
         progress => {
@@ -139,12 +140,15 @@ function SignupForm() {
         <Grid templateColumns={{ base: '1fr', lg: '1fr 1fr' }} gap={4} mt={4}>
           <FormControl id="image">
             <FormLabel>Imagen de perfil</FormLabel>
-            <Center mb={2}><Avatar size="xl" ref={avatarImg} /></Center>
+            <Center mb={2}>
+              <Avatar size="xl" ref={avatarImg} />
+            </Center>
             <Input
               type="file"
               accept="image/*"
-              onChange={(e) => handleFileChanged(e)}
-              {...register('image')} />
+              onChange={e => handleFileChanged(e)}
+              {...register('image')}
+            />
           </FormControl>
         </Grid>
 
