@@ -1,14 +1,26 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Center } from '@chakra-ui/react';
+import ListaEstudios from './ListaEstudios';
+import db from '../../FirebaseFirestoreService';
 
-export default function Main({ userData }) {
+export default function Main({ user, userData }) {
+  const [estudios, setEstudios] = useState(null);
+
+  const loadEstudios = async () => {
+    console.log("cargar estudios");
+    try {
+      const docs = await db.readDocuments("estudios", user.uid);
+      setEstudios(docs);
+    } catch (error) {
+      alert(error.message);
+    }
+  }
+
+  useEffect(() => {
+    loadEstudios();
+  }, []);
+
   return (
-    <Center>
-      <ul>
-        <h2>Bienvenido al tablero de trabajo</h2>
-        <p>{userData.nombre} {userData.apellido_paterno} {userData.apellido_materno}</p>
-        {userData.imageUrl && <img src={userData.imageUrl} />}
-      </ul>
-    </Center>
+    <ListaEstudios estudios={estudios} />
   );
 }

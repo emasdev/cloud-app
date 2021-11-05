@@ -72,7 +72,7 @@ export default function Dashboard({ children, user, userData, handleUserData }) 
       <MobileNav onOpen={onOpen} userData={userData} onSelectSection={handleSection} />
       <Box ml={{ base: 0, md: 60 }} p="4">
         {children}
-        {section == 'main' && <Main userData={userData} />}
+        {section == 'main' && <Main user={user} userData={userData} />}
         {section == 'profile' && <Profile user={user} userData={userData} handleUserData={handleUserData} />}
         {section == 'admin' && <Admin user={user} userData={userData} handleUserData={handleUserData} />}
       </Box>
@@ -88,14 +88,6 @@ const SidebarContent = ({ onClose, onSelectSection, user, ...rest }) => {
     { name: 'Estudios', icon: FiBookOpen, section: "estudios" },
     { name: 'Herramientas', icon: FiSettings, section: "herramientas" },
   ];
-
-  if (user.email === "emas.dev@gmail.com" ||
-    user.email === "mauricepiolle@gmail.com") {
-
-    LinkItems.push({ name: 'Administrador', icon: FiUsers, section: "admin" });
-  }
-
-
 
   const handleSelectSection = (section) => {
     onSelectSection(section);
